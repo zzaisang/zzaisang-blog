@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { categoryToSlug } from '../../utils/categories';
+import { withBase } from '../../utils/url';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const cats = [...new Set(posts.map((p) => p.data.category).filter((c): c is string => Boolean(c)))];
+	return cats.map((cat) => ({
+		params: { category: categoryToSlug(cat) },
+		props: {
+			category: cat,
+			posts: posts
+				.filter((p) => p.data.category === cat)
+				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
+		},
+	}));
+}
+
+const { category, posts } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead
+			title={`${category} · ${SITE_TITLE}`}
+			description={`${category} 카테고리의 글 ${posts.length}개`}
+		/>
+		<style>
+			main {
+				width: 760px;
+				max-width: calc(100% - 2em);
+			}
+			.head {
+				margin-bottom: 2rem;
+			}
+			.back {
+				color: rgb(var(--gray));
+				text-decoration: none;
+				font-size: 0.9rem;
+			}
+			.back:hover {
+				color: var(--accent);
+			}
+			.head h1 {
+				margin: 0.3em 0 0;
+			}
+			.head .count {
+				color: rgb(var(--gray));
+				font-weight: 400;
+			}
+			ul {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			li {
+				padding: 0.9rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.post-title {
+				color: rgb(var(--black));
+				text-decoration: none;
+				font-size: 1.1rem;
+			}
+			.post-title:hover {
+				color: var(--accent);
+			}
+			.date {
+				display: block;
+				margin-top: 0.2em;
+				color: rgb(var(--gray));
+				font-size: 0.85rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="head">
+				<a class="back" href={withBase('/categories')}>← 카테고리</a>
+				<h1>{category} <span class="count">({posts.length})</span></h1>
+			</div>
+			<ul>
+				{
+					posts.map((post) => (
+						<li>
+							<a class="post-title" href={withBase(`/blog/${post.id}/`)}>
+								{post.data.title}
+							</a>
+							<span class="date">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>

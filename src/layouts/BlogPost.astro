@@ -7,10 +7,12 @@ import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { ADSENSE_SLOT_ARTICLE, SITE_AUTHOR, SITE_TITLE } from '../consts';
+import { categoryToSlug } from '../utils/categories';
+import { withBase } from '../utils/url';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, tags } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
@@ -24,6 +26,8 @@ const jsonLd = {
 	author: { '@type': 'Person', name: SITE_AUTHOR },
 	publisher: { '@type': 'Organization', name: SITE_TITLE },
 	mainEntityOfPage: canonicalURL.toString(),
+	...(category ? { articleSection: category } : {}),
+	...(tags && tags.length ? { keywords: tags.join(', ') } : {}),
 	...(heroImage ? { image: new URL(heroImage.src, canonicalURL).toString() } : {}),
 };
 ---
@@ -70,6 +74,34 @@ const jsonLd = {
 			.last-updated-on {
 				font-style: italic;
 			}
+			.category {
+				display: inline-block;
+				margin-bottom: 0.7em;
+				padding: 0.2em 0.8em;
+				border-radius: 999px;
+				background: rgb(var(--gray-light));
+				color: var(--accent);
+				font-size: 0.8em;
+				font-weight: 600;
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+			.category:hover {
+				background: var(--accent);
+				color: #fff;
+			}
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.6em;
+				margin-top: 3em;
+				padding-top: 1.5em;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+			.tag {
+				color: rgb(var(--gray));
+				font-size: 0.9em;
+			}
 		</style>
 	</head>
 
@@ -92,10 +124,26 @@ const jsonLd = {
 								)
 							}
 						</div>
+						{
+							category && (
+								<a class="category" href={withBase(`/categories/${categoryToSlug(category)}/`)}>
+									{category}
+								</a>
+							)
+						}
 						<h1>{title}</h1>
 						<hr />
 					</div>
 					<slot />
+					{
+						tags && tags.length > 0 && (
+							<div class="tags">
+								{tags.map((tag) => (
+									<span class="tag">#{tag}</span>
+								))}
+							</div>
+						)
+					}
 					<AdSense slot={ADSENSE_SLOT_ARTICLE} />
 				</div>
 			</article>

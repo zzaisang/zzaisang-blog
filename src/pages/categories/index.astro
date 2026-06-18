@@ -1,0 +1,95 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+import { CATEGORY_DESCRIPTIONS, categoryToSlug, sortCategories } from '../../utils/categories';
+import { withBase } from '../../utils/url';
+
+const posts = await getCollection('blog');
+const counts = new Map<string, number>();
+for (const post of posts) {
+	const cat = post.data.category;
+	if (cat) counts.set(cat, (counts.get(cat) ?? 0) + 1);
+}
+const categories = sortCategories([...counts.keys()]);
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`카테고리 · ${SITE_TITLE}`} description="주제별로 모아 보는 글 목록" />
+		<style>
+			main {
+				width: 960px;
+				max-width: calc(100% - 2em);
+			}
+			h1 {
+				margin-bottom: 0.2em;
+			}
+			.sub {
+				margin-top: 0;
+				color: rgb(var(--gray));
+			}
+			.grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+				gap: 1rem;
+				margin-top: 2rem;
+				padding: 0;
+				list-style: none;
+			}
+			.card {
+				display: block;
+				height: 100%;
+				padding: 1.2rem 1.4rem;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 12px;
+				text-decoration: none;
+				color: inherit;
+				transition: 0.2s ease;
+			}
+			.card:hover {
+				border-color: var(--accent);
+				box-shadow: var(--box-shadow);
+			}
+			.name {
+				margin: 0;
+				color: rgb(var(--black));
+				font-size: 1.25rem;
+			}
+			.count {
+				color: var(--accent);
+				font-weight: 700;
+			}
+			.desc {
+				margin: 0.4em 0 0;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>카테고리</h1>
+			<p class="sub">주제별로 모아 보는 전체 {posts.length}개의 글</p>
+			<ul class="grid">
+				{
+					categories.map((cat) => (
+						<li>
+							<a class="card" href={withBase(`/categories/${categoryToSlug(cat)}/`)}>
+								<p class="name">
+									{cat} <span class="count">{counts.get(cat)}</span>
+								</p>
+								{CATEGORY_DESCRIPTIONS[cat] && <p class="desc">{CATEGORY_DESCRIPTIONS[cat]}</p>}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</main>
+		<Footer />
+	</body>
+</html>
