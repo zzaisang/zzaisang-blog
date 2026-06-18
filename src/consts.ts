@@ -15,3 +15,9 @@ export const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? '';
 export const ADSENSE_SLOT_ARTICLE = import.meta.env.PUBLIC_ADSENSE_SLOT_ARTICLE ?? '';
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '';
 export const NAVER_SITE_VERIFICATION = import.meta.env.PUBLIC_NAVER_SITE_VERIFICATION ?? '';
+
+// 소셜 링크 — href 가 비어 있으면 자동으로 숨겨집니다. (지원 아이콘: github·linkedin·email·x)
+export const SOCIAL_LINKS = [
+	{ name: 'GitHub', icon: 'github', href: 'https://github.com/zzaisang' },
+	{ name: 'LinkedIn', icon: 'linkedin', href: '' }, // TODO: LinkedIn 프로필 URL 입력 시 자동 표시됩니다
+];
