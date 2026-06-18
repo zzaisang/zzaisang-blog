@@ -1,36 +1,40 @@
 ---
+import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_TITLE } from '../../consts';
-import { categoryToSlug } from '../../utils/categories';
-import { withBase } from '../../utils/url';
+import BaseHead from '../../../components/BaseHead.astro';
+import Footer from '../../../components/Footer.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
+import Header from '../../../components/Header.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { POSTS_PER_PAGE, SITE_TITLE } from '../../../consts';
+import { categoryToSlug } from '../../../utils/categories';
+import { withBase } from '../../../utils/url';
 
-export async function getStaticPaths() {
+export const getStaticPaths = (async ({ paginate }) => {
 	const posts = await getCollection('blog');
 	const cats = [...new Set(posts.map((p) => p.data.category).filter((c): c is string => Boolean(c)))];
-	return cats.map((cat) => ({
-		params: { category: categoryToSlug(cat) },
-		props: {
-			category: cat,
-			posts: posts
-				.filter((p) => p.data.category === cat)
-				.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()),
-		},
-	}));
-}
+	return cats.flatMap((cat) => {
+		const catPosts = posts
+			.filter((p) => p.data.category === cat)
+			.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+		return paginate(catPosts, {
+			params: { category: categoryToSlug(cat) },
+			props: { category: cat },
+			pageSize: POSTS_PER_PAGE,
+		});
+	});
+}) satisfies GetStaticPaths;
 
-const { category, posts } = Astro.props;
+const { page, category } = Astro.props;
+const pageSuffix = page.currentPage > 1 ? ` - ${page.currentPage}페이지` : '';
 ---
 
 <!doctype html>
 <html lang="ko">
 	<head>
 		<BaseHead
-			title={`${category} · ${SITE_TITLE}`}
-			description={`${category} 카테고리의 글 ${posts.length}개`}
+			title={`${category}${pageSuffix} · ${SITE_TITLE}`}
+			description={`${category} 카테고리의 글 ${page.total}개`}
 		/>
 		<style>
 			main {
@@ -85,11 +89,11 @@ const { category, posts } = Astro.props;
 		<main>
 			<div class="head">
 				<a class="back" href={withBase('/categories')}>← 카테고리</a>
-				<h1>{category} <span class="count">({posts.length})</span></h1>
+				<h1>{category} <span class="count">({page.total})</span></h1>
 			</div>
 			<ul>
 				{
-					posts.map((post) => (
+					page.data.map((post) => (
 						<li>
 							<a class="post-title" href={withBase(`/blog/${post.id}/`)}>
 								{post.data.title}
@@ -101,6 +105,11 @@ const { category, posts } = Astro.props;
 					))
 				}
 			</ul>
+			<Pagination
+				currentPage={page.currentPage}
+				lastPage={page.lastPage}
+				baseUrl={`/categories/${categoryToSlug(category)}`}
+			/>
 		</main>
 		<Footer />
 	</body>
