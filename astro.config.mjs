@@ -5,11 +5,16 @@ import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 import { loadEnv } from 'vite';
 
-const { PUBLIC_SITE_URL } = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), 'PUBLIC_');
+const { PUBLIC_SITE_URL, PUBLIC_BASE_PATH } = loadEnv(
+	process.env.NODE_ENV ?? 'production',
+	process.cwd(),
+	'PUBLIC_',
+);
 
 // https://astro.build/config
 export default defineConfig({
 	site: PUBLIC_SITE_URL || 'https://example.com',
+	base: PUBLIC_BASE_PATH || '/',
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{

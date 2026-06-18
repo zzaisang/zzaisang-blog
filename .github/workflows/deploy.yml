@@ -34,6 +34,8 @@ jobs:
         env:
           # 저장소 Variables 에 설정한 값 사용. PUBLIC_SITE_URL 미설정 시 Pages origin 으로 대체.
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL || steps.pages.outputs.origin }}
+          # Pages 가 알려주는 base 경로(프로젝트 사이트면 /repo, 커스텀 도메인이면 /)를 자동 주입
+          PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_ADSENSE_CLIENT: ${{ vars.PUBLIC_ADSENSE_CLIENT }}
           PUBLIC_ADSENSE_SLOT_ARTICLE: ${{ vars.PUBLIC_ADSENSE_SLOT_ARTICLE }}
           PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.PUBLIC_GOOGLE_SITE_VERIFICATION }}
