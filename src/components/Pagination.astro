@@ -1,0 +1,108 @@
+---
+// 목록 페이지용 페이지네이션. [...page] rest 라우트 기준으로 동작한다.
+//   1페이지 → baseUrl/ , N(>1)페이지 → baseUrl/N/  (모두 withBase 로 base 경로 적용)
+import { withBase } from '../utils/url';
+
+interface Props {
+	currentPage: number;
+	lastPage: number;
+	/** 라우트 기준 경로 (끝 슬래시 없이). 예: '/blog', '/categories/database' */
+	baseUrl: string;
+}
+
+const { currentPage, lastPage, baseUrl } = Astro.props;
+
+const href = (n: number) => withBase(n === 1 ? `${baseUrl}/` : `${baseUrl}/${n}/`);
+const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
+---
+
+{
+	lastPage > 1 && (
+		<nav class="pagination" aria-label="페이지 navigation">
+			{currentPage > 1 ? (
+				<a class="arrow" href={href(currentPage - 1)} rel="prev" aria-label="이전 페이지">
+					←
+				</a>
+			) : (
+				<span class="arrow disabled" aria-hidden="true">
+					←
+				</span>
+			)}
+
+			<ul>
+				{pages.map((n) => (
+					<li>
+						{n === currentPage ? (
+							<span class="num current" aria-current="page">
+								{n}
+							</span>
+						) : (
+							<a class="num" href={href(n)} aria-label={`${n}페이지`}>
+								{n}
+							</a>
+						)}
+					</li>
+				))}
+			</ul>
+
+			{currentPage < lastPage ? (
+				<a class="arrow" href={href(currentPage + 1)} rel="next" aria-label="다음 페이지">
+					→
+				</a>
+			) : (
+				<span class="arrow disabled" aria-hidden="true">
+					→
+				</span>
+			)}
+		</nav>
+	)
+}
+
+<style>
+	.pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 3rem 0 1rem;
+	}
+	.pagination ul {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.3rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.num,
+	.arrow {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 2.3rem;
+		height: 2.3rem;
+		padding: 0 0.6rem;
+		border-radius: 8px;
+		color: rgb(var(--black));
+		text-decoration: none;
+		font-size: 0.95rem;
+		line-height: 1;
+		transition: 0.2s ease;
+	}
+	.num:hover,
+	.arrow:not(.disabled):hover {
+		background: rgb(var(--gray-light));
+		color: var(--accent);
+	}
+	.num.current {
+		background: var(--accent);
+		color: #fff;
+		font-weight: 700;
+	}
+	.arrow.disabled {
+		color: rgb(var(--gray-light));
+		cursor: default;
+	}
+</style>
