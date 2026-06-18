@@ -1,0 +1,55 @@
+---
+import { ADSENSE_CLIENT } from '../consts';
+
+interface Props {
+	/** AdSense 광고 단위 슬롯 ID (AdSense 대시보드에서 광고 단위 생성 후 발급) */
+	slot?: string;
+	/** 광고 형식. 기본값 'auto'(반응형) */
+	format?: string;
+	/** 반응형 전체 폭 사용 여부 */
+	responsive?: boolean;
+	/** 광고 컨테이너 인라인 스타일 */
+	style?: string;
+	/** 추가 클래스 */
+	class?: string;
+}
+
+const {
+	slot,
+	format = 'auto',
+	responsive = true,
+	style = 'display:block',
+	class: className,
+} = Astro.props;
+
+// 게시자 ID 와 슬롯이 모두 있을 때만 렌더링 (미설정 시 깨진 광고 요청 방지)
+const enabled = Boolean(ADSENSE_CLIENT && slot);
+---
+
+{
+	enabled && (
+		<div class:list={['adsense', className]} aria-hidden="true">
+			<ins
+				class="adsbygoogle"
+				style={style}
+				data-ad-client={ADSENSE_CLIENT}
+				data-ad-slot={slot}
+				data-ad-format={format}
+				data-full-width-responsive={responsive ? 'true' : 'false'}
+			/>
+			<script is:inline>
+				(window.adsbygoogle = window.adsbygoogle || []).push({});
+			</script>
+		</div>
+	)
+}
+
+<style>
+	.adsense {
+		display: block;
+		margin: 2rem auto;
+		text-align: center;
+		min-height: 1px;
+		overflow: hidden;
+	}
+</style>
