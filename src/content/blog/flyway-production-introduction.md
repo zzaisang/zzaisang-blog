@@ -119,7 +119,7 @@ implementation("org.springframework.boot:spring-boot-flyway")
 implementation("org.flywaydb:flyway-database-postgresql")
 ```
 
-버전은 핀하지 않는다. Spring Boot BOM이 Flyway 버전을 관리한다. (블로그를 쓰는 시점 기준으로, 같은 LOMS 운영 가이드 문서가 `flyway-core`로 안내하고 있어 코드와 문서가 어긋나 있었다. 정본을 코드로 맞추는 정리가 필요했다.)
+버전은 핀하지 않는다. Spring Boot BOM이 Flyway 버전을 관리한다. (블로그를 쓰는 시점 기준으로, 사내 운영 가이드 문서가 `flyway-core`로 안내하고 있어 코드와 문서가 어긋나 있었다. 정본을 코드로 맞추는 정리가 필요했다.)
 
 ### 함정 2 — `.env`가 안 읽혀 `${POSTGRESQL_URL}`이 문자 그대로 들어간다
 

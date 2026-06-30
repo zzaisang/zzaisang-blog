@@ -20,7 +20,7 @@ class PermissionEnforcementAspect(
     private val permissionChecker: PermissionChecker,
 ) {
 
-    @Before("@annotation(io.laonmedi.loms.common.core.authorization.annotation.RequirePermission)")
+    @Before("@annotation(com.example.security.authorization.annotation.RequirePermission)")
     fun enforce(joinPoint: JoinPoint) {
         val signature = joinPoint.signature as MethodSignature
         val annotation = signature.method.getAnnotation(RequirePermission::class.java) ?: return
@@ -117,7 +117,7 @@ class PortalAuthorizationManager(
 ```kotlin
 .authorizeHttpRequests {
     // ASYNC re-dispatch는 REQUEST dispatch에서 이미 인가를 통과한 경우에만 도달하므로 재평가하지 않는다.
-    // (SSE 타임아웃 re-dispatch 시 SecurityContext 미복원으로 인한 AuthorizationDeniedException 방지 — LOMS-API-2R)
+    // (SSE 타임아웃 re-dispatch 시 SecurityContext 미복원으로 인한 AuthorizationDeniedException 방지)
     it.dispatcherTypeMatchers(DispatcherType.ASYNC).permitAll()
     it.requestMatchers(*SecurityPathConfiguration.PERMITTED_PATHS).permitAll()
     it.requestMatchers("/provider/**").access(PortalAuthorizationManager(Portal.PROVIDER))
