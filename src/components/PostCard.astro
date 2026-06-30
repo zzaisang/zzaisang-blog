@@ -1,0 +1,58 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../utils/url';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	// 카드가 놓이는 맥락의 제목 레벨 (홈 'h2 최근 글' 아래=3). 기본 3.
+	headingLevel?: 2 | 3;
+}
+
+const { post, headingLevel = 3 } = Astro.props;
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<a class="post-card" href={withBase(`/blog/${post.id}/`)}>
+	{post.data.heroImage && <Image width={720} height={360} src={post.data.heroImage} alt="" />}
+	{post.data.category && <span class="cat">{post.data.category}</span>}
+	<TitleTag class="title">{post.data.title}</TitleTag>
+	<p class="date"><FormattedDate date={post.data.pubDate} /></p>
+</a>
+
+<style>
+	.post-card {
+		display: block;
+		text-decoration: none;
+		transition: 0.2s ease;
+	}
+	.post-card img {
+		margin-bottom: 0.5rem;
+		border-radius: 12px;
+	}
+	.cat {
+		display: inline-block;
+		margin-bottom: 0.3em;
+		color: rgb(var(--gray));
+		font-size: 0.8rem;
+	}
+	.title {
+		margin: 0;
+		color: rgb(var(--black));
+		font-size: 1.25rem;
+		line-height: 1.25;
+	}
+	.date {
+		margin: 0.2em 0 0;
+		color: rgb(var(--gray));
+		font-size: 0.9rem;
+	}
+	.post-card:hover .title,
+	.post-card:hover .date {
+		color: var(--accent);
+	}
+	.post-card:hover img {
+		box-shadow: var(--box-shadow);
+	}
+</style>

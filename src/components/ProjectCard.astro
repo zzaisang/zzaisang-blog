@@ -1,0 +1,175 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { PROJECT_STATUS_LABELS, PROJECT_TYPE_LABELS } from '../utils/projects';
+import { withBase } from '../utils/url';
+
+interface Props {
+	project: CollectionEntry<'projects'>;
+	// 카드가 놓이는 맥락의 제목 레벨 (홈 섹션 아래=3, /projects 인덱스=2). 기본 2.
+	headingLevel?: 2 | 3;
+}
+
+const { project, headingLevel = 2 } = Astro.props;
+const { data, id } = project;
+const detailHref = withBase(`/projects/${id}/`);
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<article class="card">
+	{
+		data.heroImage && (
+			<a href={detailHref} class="thumb" aria-label={data.title}>
+				<Image width={720} height={360} src={data.heroImage} alt="" />
+			</a>
+		)
+	}
+	<div class="body">
+		<div class="badges">
+			<span class="badge type">{PROJECT_TYPE_LABELS[data.projectType] ?? data.projectType}</span>
+			<span class="badge status">{PROJECT_STATUS_LABELS[data.status] ?? data.status}</span>
+		</div>
+		<TitleTag class="title"><a href={detailHref}>{data.title}</a></TitleTag>
+		<p class="summary">{data.summary}</p>
+		{
+			data.role && (
+				<p class="role">
+					{data.role}
+					{data.teamSize ? ` · ${data.teamSize}` : ''}
+				</p>
+			)
+		}
+		{
+			data.techStack.length > 0 && (
+				<ul class="stack">
+					{data.techStack.map((t) => (
+						<li>{t}</li>
+					))}
+				</ul>
+			)
+		}
+		<div class="links">
+			<a class="link primary" href={detailHref}>자세히 →</a>
+			{
+				!data.confidential && data.repoUrl && (
+					<a class="link" href={data.repoUrl} target="_blank" rel="noopener noreferrer">
+						코드
+					</a>
+				)
+			}
+			{
+				!data.confidential && data.demoUrl && (
+					<a class="link" href={data.demoUrl} target="_blank" rel="noopener noreferrer">
+						데모
+					</a>
+				)
+			}
+			{data.confidential && <span class="link muted">상세는 요청 시 공유</span>}
+		</div>
+	</div>
+</article>
+
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		overflow: hidden;
+		transition: 0.2s ease;
+	}
+	.card:hover {
+		border-color: var(--accent);
+		box-shadow: var(--box-shadow);
+	}
+	.thumb {
+		display: block;
+	}
+	.thumb img {
+		display: block;
+		width: 100%;
+		border-radius: 0;
+	}
+	.body {
+		display: flex;
+		flex-direction: column;
+		padding: 1.1rem 1.3rem 1.3rem;
+	}
+	.badges {
+		display: flex;
+		gap: 0.4rem;
+		margin-bottom: 0.6rem;
+	}
+	.badge {
+		padding: 0.1em 0.6em;
+		border-radius: 999px;
+		font-size: 0.72rem;
+		font-weight: 600;
+	}
+	.badge.type {
+		background: var(--accent);
+		color: #fff;
+	}
+	.badge.status {
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray-dark));
+	}
+	.title {
+		margin: 0 0 0.3rem;
+		font-size: 1.3rem;
+		line-height: 1.25;
+	}
+	.title a {
+		color: rgb(var(--black));
+		text-decoration: none;
+	}
+	.title a:hover {
+		color: var(--accent);
+	}
+	.summary {
+		margin: 0 0 0.6rem;
+		color: rgb(var(--gray-dark));
+		font-size: 0.95rem;
+		line-height: 1.5;
+	}
+	.role {
+		margin: 0 0 0.7rem;
+		color: rgb(var(--gray));
+		font-size: 0.85rem;
+	}
+	.stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		margin: 0 0 0.9rem;
+		padding: 0;
+		list-style: none;
+	}
+	.stack li {
+		padding: 0.15em 0.6em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 6px;
+		color: rgb(var(--gray));
+		font-size: 0.78rem;
+	}
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: auto;
+		padding-top: 0.3rem;
+	}
+	.link {
+		font-size: 0.88rem;
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.link.primary {
+		color: var(--accent);
+	}
+	.link.muted {
+		color: rgb(var(--gray));
+		font-weight: 400;
+	}
+</style>

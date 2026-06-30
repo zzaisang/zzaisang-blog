@@ -1,0 +1,222 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import { SITE_AUTHOR } from '../consts';
+import { PROJECT_STATUS_LABELS, PROJECT_TYPE_LABELS } from '../utils/projects';
+import { withBase } from '../utils/url';
+
+// 포트폴리오 상세 전용 레이아웃. BlogPost 와 달리 광고(AdSense)·BlogPosting JSON-LD 를 넣지 않습니다.
+type Props = CollectionEntry<'projects'>['data'];
+
+const {
+	title,
+	summary,
+	role,
+	pubDate,
+	updatedDate,
+	techStack,
+	projectType,
+	status,
+	teamSize,
+	repoUrl,
+	demoUrl,
+	writeupSlug,
+	confidential,
+	heroImage,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'CreativeWork',
+	name: title,
+	description: summary,
+	dateCreated: pubDate.toISOString(),
+	...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+	author: { '@type': 'Person', name: SITE_AUTHOR },
+	...(techStack.length ? { keywords: techStack.join(', ') } : {}),
+	...(!confidential && repoUrl ? { codeRepository: repoUrl } : {}),
+	...(!confidential && demoUrl ? { url: demoUrl } : {}),
+	mainEntityOfPage: canonicalURL.toString(),
+	...(heroImage ? { image: new URL(heroImage.src, canonicalURL).toString() } : {}),
+};
+---
+
+<html lang="ko">
+	<head>
+		<BaseHead title={title} description={summary} image={heroImage} />
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+		<style>
+			main {
+				width: calc(100% - 2em);
+				max-width: 100%;
+				margin: 0;
+			}
+			.hero-image {
+				width: 100%;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+			}
+			.prose {
+				width: var(--content-width);
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 1em;
+				color: rgb(var(--gray-dark));
+			}
+			.back {
+				display: inline-block;
+				margin-bottom: 1em;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+				text-decoration: none;
+			}
+			.back:hover {
+				color: var(--accent);
+			}
+			.title {
+				margin-bottom: 1em;
+				padding-bottom: 1em;
+			}
+			.title h1 {
+				margin: 0 0 0.3em 0;
+			}
+			.summary {
+				margin: 0 0 1em;
+				color: rgb(var(--gray-dark));
+				font-size: 1.1rem;
+			}
+			.badges {
+				display: flex;
+				gap: 0.4rem;
+				margin-bottom: 0.8em;
+			}
+			.badge {
+				padding: 0.15em 0.7em;
+				border-radius: 999px;
+				font-size: 0.78rem;
+				font-weight: 600;
+			}
+			.badge.type {
+				background: var(--accent);
+				color: #fff;
+			}
+			.badge.status {
+				background: rgb(var(--gray-light));
+				color: rgb(var(--gray-dark));
+			}
+			.meta {
+				margin: 0 0 0.8em;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			.stack {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.4rem;
+				margin: 0 0 1em;
+				padding: 0;
+				list-style: none;
+			}
+			.stack li {
+				padding: 0.15em 0.7em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 6px;
+				color: rgb(var(--gray));
+				font-size: 0.82rem;
+			}
+			.links {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1rem;
+				margin-bottom: 0.5em;
+			}
+			.links a {
+				font-weight: 600;
+				text-decoration: none;
+			}
+			.links .muted {
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			.writeup {
+				margin-top: 3em;
+				padding-top: 1.5em;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<div class="hero-image">
+					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+				</div>
+				<div class="prose">
+					<a class="back" href={withBase('/projects')}>← 프로젝트</a>
+					<div class="title">
+						<div class="badges">
+							<span class="badge type">{PROJECT_TYPE_LABELS[projectType] ?? projectType}</span>
+							<span class="badge status">{PROJECT_STATUS_LABELS[status] ?? status}</span>
+						</div>
+						<h1>{title}</h1>
+						<p class="summary">{summary}</p>
+						<p class="meta">
+							<FormattedDate date={pubDate} />
+							{updatedDate && <span> · 업데이트 <FormattedDate date={updatedDate} /></span>}
+							{role && <span> · {role}</span>}
+							{teamSize && <span> · {teamSize}</span>}
+						</p>
+						{
+							techStack.length > 0 && (
+								<ul class="stack">
+									{techStack.map((t) => (
+										<li>{t}</li>
+									))}
+								</ul>
+							)
+						}
+						<div class="links">
+							{
+								!confidential && repoUrl && (
+									<a href={repoUrl} target="_blank" rel="noopener noreferrer">
+										코드 ↗
+									</a>
+								)
+							}
+							{
+								!confidential && demoUrl && (
+									<a href={demoUrl} target="_blank" rel="noopener noreferrer">
+										데모 ↗
+									</a>
+								)
+							}
+							{confidential && <span class="muted">소스 비공개 — 상세는 요청 시 공유</span>}
+						</div>
+						<hr />
+					</div>
+					<slot />
+					{
+						writeupSlug && (
+							<p class="writeup">
+								<a href={withBase(`/blog/${writeupSlug}/`)}>관련 글 읽기 →</a>
+							</p>
+						)
+					}
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>
