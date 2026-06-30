@@ -1,22 +1,210 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import PostCard from '../components/PostCard.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
 import { withBase } from '../utils/url';
+
+// 대표 프로젝트 영역 — 콘텐츠가 생기면 아래 본문 주석과 함께 이 3줄도 해제하세요.
+// import ProjectCard from '../components/ProjectCard.astro';
+// import { featuredProjects } from '../utils/projects';
+// const featured = featuredProjects(await getCollection('projects'), 3);
+
+const recentPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 5);
+
+// Person JSON-LD — 구글이 사이트 주인을 하나의 '엔티티'로 인식하게 합니다.
+const sameAs = SOCIAL_LINKS.filter((l) => l.href).map((l) => l.href);
+const personJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: SITE_AUTHOR,
+	url: new URL(withBase('/'), Astro.site).toString(),
+	...(sameAs.length ? { sameAs } : {}),
+};
 ---
 
 <!doctype html>
 <html lang="ko">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<script type="application/ld+json" is:inline set:html={JSON.stringify(personJsonLd)} />
+		<style>
+			main {
+				width: 960px;
+				max-width: calc(100% - 2em);
+			}
+			/* Hero */
+			.hero {
+				padding: 2.5em 0 3em;
+				text-align: center;
+			}
+			.hero .greeting {
+				margin: 0 0 0.3em;
+				color: rgb(var(--gray));
+			}
+			.hero h1 {
+				margin: 0 0 0.4em;
+				font-size: 2.8em;
+			}
+			.hero .handle {
+				color: var(--accent);
+			}
+			.hero .positioning {
+				max-width: 36ch;
+				margin: 0 auto 1.5em;
+				color: rgb(var(--gray-dark));
+				font-size: 1.15rem;
+				line-height: 1.6;
+			}
+			.cta {
+				display: flex;
+				justify-content: center;
+				gap: 0.8rem;
+				margin-bottom: 0.5em;
+			}
+			.btn {
+				padding: 0.6em 1.4em;
+				border: 1px solid var(--accent);
+				border-radius: 8px;
+				font-weight: 600;
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+			.btn.primary {
+				background: var(--accent);
+				color: #fff;
+			}
+			.btn.primary:hover {
+				background: var(--accent-dark);
+				border-color: var(--accent-dark);
+			}
+			.btn:not(.primary) {
+				color: var(--accent);
+			}
+			.btn:not(.primary):hover {
+				background: rgb(var(--gray-light));
+			}
+			/* Blocks */
+			.block {
+				margin-top: 3.5em;
+			}
+			.block-head {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				margin-bottom: 1.2em;
+			}
+			.block-head h2 {
+				margin: 0;
+				font-size: 1.8em;
+			}
+			.more {
+				font-size: 0.9rem;
+				font-weight: 600;
+				text-decoration: none;
+				color: var(--accent);
+			}
+			.proj-grid,
+			.post-grid {
+				display: grid;
+				gap: 1.5rem;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			.proj-grid {
+				grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+			}
+			.post-grid {
+				grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+			}
+			.proj-grid > li {
+				display: grid;
+			}
+			.contact {
+				margin-top: 3.5em;
+				padding: 2em 0 1em;
+				text-align: center;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+			.contact p {
+				color: rgb(var(--gray-dark));
+			}
+			@media (max-width: 720px) {
+				.hero h1 {
+					font-size: 2em;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>👋 어서 오세요</h1>
-			<p>{SITE_DESCRIPTION}</p>
-			<p><a href={withBase('/blog')}>블로그 글 보러 가기 →</a></p>
+			<section class="hero">
+				<p class="greeting">안녕하세요 👋</p>
+				<h1><span class="handle">zzaisang</span> 입니다</h1>
+				<!-- TODO: 아래 한 줄 포지셔닝을 본인 스택·도메인에 맞게 교체하세요 -->
+				<p class="positioning">
+					Spring·JPA로 백엔드 시스템을 설계하고 만드는 개발자입니다. 마주친 문제와 해결 과정을 기록합니다.
+				</p>
+				<div class="cta">
+					{/* 프로젝트 활성화 시 복구: <a class="btn primary" href={withBase('/projects')}>프로젝트 보기</a> */}
+					<a class="btn primary" href={withBase('/blog')}>글 보러 가기</a>
+					<a class="btn" href={withBase('/about')}>소개</a>
+				</div>
+				<SocialLinks variant="footer" />
+			</section>
+
+			{/* === 대표 프로젝트 영역 — 콘텐츠 준비되면 복구 ===
+			    프론트매터의 ProjectCard·featuredProjects import 와 featured 상수도 함께 해제하세요.
+					<section class="block">
+						<div class="block-head">
+							<h2>대표 프로젝트</h2>
+							<a class="more" href={withBase('/projects')}>
+								전체 보기 →
+							</a>
+						</div>
+						<ul class="proj-grid">
+							{featured.map((project) => (
+								<li>
+									<ProjectCard project={project} headingLevel={3} />
+								</li>
+							))}
+						</ul>
+					</section>
+			=== 대표 프로젝트 영역 끝 === */}
+
+			{
+				recentPosts.length > 0 && (
+					<section class="block">
+						<div class="block-head">
+							<h2>최근 글</h2>
+							<a class="more" href={withBase('/blog')}>
+								전체 보기 →
+							</a>
+						</div>
+						<ul class="post-grid">
+							{recentPosts.map((post) => (
+								<li>
+									<PostCard post={post} />
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
+
+			{/* === 연락 영역 — 콘텐츠 준비되면 복구 ===
+			<section class="contact">
+				<h2>연락</h2>
+				<p>협업·채용 문의는 아래 채널로 편하게 연락 주세요.</p>
+			</section>
+			=== 연락 영역 끝 === */}
 		</main>
 		<Footer />
 	</body>
