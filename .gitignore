@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local-only design/meta docs (kept out of the public repo by design)
+docs/
