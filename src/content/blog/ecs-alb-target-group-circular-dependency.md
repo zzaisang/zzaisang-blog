@@ -167,6 +167,8 @@ aws elbv2 delete-rule --rule-arn "$TEMP_RULE_ARN"
 --query "Rules[?Priority=='4']"       # 정상
 ```
 
+이런 종류의 함정은 [AWS CLI와 zsh에서 검증이 거짓말하는 방식](../zsh-aws-cli-verification-pitfalls/)에 더 정리해 뒀다.
+
 ### 삭제 전 참조 0건 확인
 
 타깃그룹 삭제는 되돌릴 수 없다. 지우기 직전에 참조가 실제로 0건인지 다시 본다. "아까 바꿨으니 없겠지"로 넘어가면 안 된다.
