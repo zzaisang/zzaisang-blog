@@ -40,7 +40,7 @@ tags: ["abstract", "Interface", "Java", "OOP"]
 
 ## **Interface**
 
-**Interface**는 부모, 자식 관계인 **상속 관계에 얽메이지 않고**, 공통 기능이 필요 할때, **Abstract Method를 정의해놓고 구현(implements)**하는 Class에서 **각 기능들을 Overridng**하여 **여러가지 형태로 구현**할 수 있기에 **다형성과 연관**되어 있다.
+**Interface**는 부모, 자식 관계인 **상속 관계에 얽메이지 않고**, 공통 기능이 필요 할때, **Abstract Method를 정의해놓고 구현(implements)하는** Class에서 **각 기능들을 Overridng**하여 **여러가지 형태로 구현**할 수 있기에 **다형성과 연관**되어 있다.
 
 Interface는 **해당 Interface를 구현하는 Class들에 대해 동일한 method, 동작을 강제하기 위해 존재**한다.  
 Java에서 다중 상속이 안되어 발생하는 Abstract Class의 한계도 보완해줄 수 있다.  

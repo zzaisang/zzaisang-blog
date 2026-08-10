@@ -49,7 +49,7 @@ tags: ["mongoDB", "NoSQL", "query"]
 ### 조회 조건 예시 (Mysql vs mongoDB)
 
 1.  `SELECT * FROM inventory WHERE status = "D"`  **VS**   `{ status: "D" } ... }`
-2.  `SELECT * FROM inventory WHERE status in ("A", "D")  **VS**`  `{ status: { $in: [ "A", "D" ] } }`
+2.  `SELECT * FROM inventory WHERE status in ("A", "D")`  **VS**  `{ status: { $in: [ "A", "D" ] } }`
 3.  `SELECT * FROM inventory WHERE status = "A" AND qty < 30`  **VS**  `{ status: "A", qty: { $lt: 30 } }`
 4.  `SELECT * FROM inventory WHERE status = "A" OR qty < 30`  **VS**  `{ $or: [ { status: "A" }, { qty: { $lt: 30 } } ] }`
 5.  `SELECT * FROM inventory WHERE status = "A" AND ( qty < 30 OR item LIKE "p%")`  **VS**  `{ status: "A", $or: [ { qty: { $lt: 30 } }, { item: /^p/ } ] }`
