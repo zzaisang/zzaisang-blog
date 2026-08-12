@@ -10,7 +10,7 @@ CI가 이미지를 밀어 넣는 ECR 경로를 `myapp-api`에서 `app/api`로 �
 
 간단해 보이지만 두 군데가 걸린다. **이미지를 어떻게 옮기느냐**, 그리고 **언제 경로를 바꾸느냐**다. 둘 다 대충 하면 롤백이 막힌다.
 
-## 왜 crane인가 — digest가 보존된다
+## crane을 쓰는 이유는 digest 보존이다
 
 `docker pull` 하고 태그 바꿔 `docker push` 하면 되는 것 아닌가 싶다. 이미지 "내용"은 같지만 **manifest digest가 달라질 수 있다.**
 
@@ -93,7 +93,7 @@ in the registry with id '123456789012'
 
 ECR은 push 시점에 리포지토리를 자동 생성하지 않는다(리포지토리 생성 템플릿을 따로 설정한 경우가 아니라면).
 
-### 1. 리포지토리 생성 — 기존 설정을 미러링한다
+### 1. 기존 설정을 미러링해 리포지토리 생성
 
 새로 만들면 AWS 기본값이 적용된다. 구 리포지토리와 설정이 다르면 동작이 조용히 바뀐다. 먼저 읽는다.
 
@@ -128,9 +128,9 @@ aws ecr list-images --repository-name app/api --filter tagStatus=TAGGED --output
   | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["imageIds"]))'
 ```
 
-### 3. 검증 — 세 가지를 본다
+### 3. 검증은 세 가지를 본다
 
-개수만 세면 부족하다. 태그 집합의 **차집합**, 공통 태그의 **digest 일치**, 그리고 **지금 가동 중인 태그가 실제로 있는지**를 확인한다.
+개수만 세면 부족하다. 태그 집합의 차집합, 공통 태그의 digest 일치, 그리고 지금 가동 중인 태그가 실제로 있는지까지 확인한다.
 
 ```python
 import subprocess, json

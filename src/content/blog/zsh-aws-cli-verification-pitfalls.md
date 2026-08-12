@@ -1,5 +1,5 @@
 ---
-title: "빈 결과를 성공으로 읽는 검증 — zsh와 AWS CLI 함정 넷"
+title: "빈 결과를 성공으로 읽는 zsh·AWS CLI 함정 넷"
 description: "삭제 전 안전 확인 스크립트가 두 번의 실패를 '일치'로 보고했습니다. zsh 워드분할과 AWS CLI 페이지네이션·JMESPath 타입 함정을 실제 사례로 정리합니다."
 pubDate: "2026-08-10T16:50:33+09:00"
 category: "DevOps"

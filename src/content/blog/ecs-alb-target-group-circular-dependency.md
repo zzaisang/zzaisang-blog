@@ -1,5 +1,5 @@
 ---
-title: "ECS와 ALB의 순환 의존 — 무중단 타깃그룹 컷오버"
+title: "ECS와 ALB의 순환 의존 끊고 타깃그룹 무중단 컷오버하기"
 description: "LB에 연결되지 않은 타깃그룹으로는 ECS 서비스를 만들 수 없고, 리스너 규칙 전환은 서비스가 healthy된 뒤여야 하는 교착을 임시 규칙으로 끊는 방법을 정리합니다."
 pubDate: "2026-08-10T15:51:55+09:00"
 category: "DevOps"
@@ -53,7 +53,7 @@ ECS 서비스 생성  ──기다림──▶  타깃그룹이 LB에 연결되�
               (서비스가 healthy 되기를)
 ```
 
-## 끊는 법 — "LB 연결"과 "트래픽 수신"을 분리한다
+## "LB 연결"과 "트래픽 수신"을 분리해 끊는다
 
 핵심은 이거다. **ALB가 요구하는 건 "규칙이 이 타깃그룹을 가리킬 것"이지, "그 규칙에 트래픽이 실제로 도달할 것"이 아니다.**
 
@@ -102,7 +102,7 @@ aws elbv2 create-rule \
 
 2번이 앞으로 왔고, 6번이 새로 생겼다. **4번이 3번과 5번 사이에 있다는 게 이 순서의 전부다.**
 
-## 4번 — healthy 확인
+## 4번 healthy 확인
 
 ```bash
 aws elbv2 describe-target-health --target-group-arn "$TG_ARN" \
@@ -116,7 +116,7 @@ aws elbv2 describe-target-health --target-group-arn "$TG_ARN" \
 
 `initial`이면 아직 헬스체크 임계치를 못 채운 것이고, `unhealthy`면 헬스체크 경로나 포트, 보안그룹을 봐야 한다. 이 단계를 건너뛰고 5번으로 가면 컷오버가 곧 장애다.
 
-## 5번 — 규칙 전환은 modify로
+## 5번 규칙 전환은 modify-rule로
 
 규칙을 **지웠다가 새로 만들면 그 사이에 공백이 생긴다.** 그 짧은 순간 요청은 리스너 기본 동작으로 떨어진다. `modify-rule`로 기존 규칙의 action만 교체하면 원자적이다.
 
