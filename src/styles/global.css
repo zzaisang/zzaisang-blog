@@ -50,6 +50,9 @@ h6 {
 	margin: 0 0 0.5rem 0;
 	color: rgb(var(--black));
 	line-height: 1.2;
+	/* 여러 줄로 넘어가는 제목의 각 줄 길이를 비슷하게 맞춥니다.
+	   미지원 브라우저는 기존 방식(줄이 꽉 차면 다음 줄)으로 폴백됩니다. */
+	text-wrap: balance;
 }
 h1 {
 	font-size: 3.052em;
