@@ -1,5 +1,5 @@
 ---
-title: "ECS 배포 잡을 2분 늘린 AWS SDK 웨이터 백오프 고치기"
+title: "GitHub Actions ECS 배포 시간 단축하기"
 description: "GitHub Actions ECS 배포 잡의 미귀속 2분을 스텝 단위로 추적해, 원인이 AWS SDK 웨이터의 지수 백오프였음을 밝히고 한 줄로 고친 과정을 정리합니다."
 pubDate: "2026-08-12T11:24:35+09:00"
 category: "DevOps"
@@ -63,7 +63,7 @@ aws ecs describe-services --cluster "$CLUSTER" --services "$SERVICE" \
 
 ## 원인은 조용히 바뀐 라이브러리 기본값이었다
 
-`aws-actions/amazon-ecs-deploy-task-definition` 액션은 `wait-for-service-stability: true`일 때 AWS SDK의 `waitUntilServicesStable` 웨이터를 호출한다. 액션 소스를 열어보면 이렇게 넘긴다.
+[`aws-actions/amazon-ecs-deploy-task-definition`](https://github.com/aws-actions/amazon-ecs-deploy-task-definition) 액션은 `wait-for-service-stability: true`일 때 AWS SDK의 `waitUntilServicesStable` 웨이터를 호출한다. [v2.6.3의 액션 소스](https://github.com/aws-actions/amazon-ecs-deploy-task-definition/blob/v2.6.3/index.js#L248-L262)를 열어보면 이렇게 넘긴다.
 
 ```js
 const waiterConfig = {
@@ -85,9 +85,9 @@ await waitUntilServicesStable(waiterConfig, { services: [service], cluster });
 +  const serviceDefaults = { minDelay: 15, maxDelay: 600 };
 ```
 
-커밋 메시지에 "No functional changes" 라고 적혀 있다는 게 이 글의 절반이다. 코드 생성기를 갈아끼우면서 모델에서 딸려온 값이 바뀌었고, 그걸 기능 변경으로 보지 않은 것이다.
+문제의 커밋은 [aws-sdk-js-v3의 `20258a5`](https://github.com/aws/aws-sdk-js-v3/commit/20258a5ffedcaffdf80b85eeb66d5e00057de37d)다. 커밋 메시지에 "No functional changes" 라고 적혀 있다는 게 이 글의 절반이다. 코드 생성기를 갈아끼우면서 모델에서 딸려온 값이 바뀌었고, 그걸 기능 변경으로 보지 않은 것이다.
 
-폴링 간격 계산식은 이렇다.
+폴링 간격 계산식은 [smithy-typescript의 `poller.ts`](https://github.com/smithy-lang/smithy-typescript/blob/main/packages/core/src/submodules/client/util-waiter/poller.ts#L128-L146)에 있다.
 
 ```js
 const attemptCountCeiling = Math.log(maxDelayMs / minDelayMs) / Math.log(2) + 1;
@@ -112,7 +112,7 @@ return randomInRange(minDelayMs, capped);   // min + Math.random() * (max - min)
 
 ## 한 줄로 고친다
 
-액션은 폴링 상한을 직접 지정할 수 있는 입력을 제공한다.
+액션은 폴링 상한을 직접 지정할 수 있는 [`wait-max-delay-seconds` 입력](https://github.com/aws-actions/amazon-ecs-deploy-task-definition/blob/v2.6.3/action.yml#L25-L27)을 제공한다. [PR #839](https://github.com/aws-actions/amazon-ecs-deploy-task-definition/pull/839)로 들어온 것으로, 설명에도 "If not set, AWS SDK uses exponential backoff"라고 적혀 있다.
 
 ```yaml
 - name: Deploy to Amazon ECS
@@ -134,6 +134,8 @@ return randomInRange(minDelayMs, capped);   // min + Math.random() * (max - min)
 ## 주의점
 
 **대기를 없애는 게 답인 경우는 드물다.** 이 문제를 만나면 `wait-for-service-stability: false`가 제일 먼저 떠오른다. 그러면 잡은 200초 빨라지지만 배포가 롤백돼도 초록불이 뜬다. 진단이 끝나기 전에 안전장치부터 떼면 안 된다.
+
+**같은 증상이 업스트림에도 올라와 있다.** [이슈 #872](https://github.com/aws-actions/amazon-ecs-deploy-task-definition/issues/872)가 v2.6.3에서 "배포가 끝난 뒤 몇 분을 더 기다린다"고 보고하는데, 이 글을 쓰는 시점에 아직 열려 있다.
 
 **액션 태그를 부동(floating)으로 쓰면 이런 게 조용히 들어온다.** `@v2`는 계속 움직인다. 이번 리그레션도 액션 자체 코드는 한 줄도 안 바뀌고 번들된 SDK 버전이 올라가면서 들어왔다. 부동 태그의 편의를 포기할 생각은 없지만, "액션 코드가 안 바뀌었으니 액션 탓이 아니다"는 추론은 틀릴 수 있다는 걸 기억해 둘 만하다.
 
