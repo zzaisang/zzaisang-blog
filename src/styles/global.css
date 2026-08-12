@@ -88,6 +88,18 @@ input {
 }
 table {
 	width: 100%;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+}
+th,
+td {
+	border: 1px solid rgba(var(--gray), 40%);
+	padding: 0.4em 0.6em;
+	text-align: center;
+	word-break: break-word;
+}
+th {
+	background-color: rgba(var(--gray-light), 60%);
 }
 img {
 	max-width: 100%;
