@@ -1,5 +1,5 @@
 ---
-title: "검증 스크립트가 OK를 위조한 날 — zsh와 AWS CLI 함정 4종"
+title: "빈 결과를 성공으로 읽는 검증 — zsh와 AWS CLI 함정 넷"
 description: "삭제 전 안전 확인 스크립트가 두 번의 실패를 '일치'로 보고했습니다. zsh 워드분할과 AWS CLI 페이지네이션·JMESPath 타입 함정을 실제 사례로 정리합니다."
 pubDate: "2026-08-10T16:50:33+09:00"
 category: "DevOps"
@@ -12,9 +12,7 @@ tags: ["zsh", "aws-cli", "jmespath", "shell", "pagination"]
 
 원인을 파고들면서 네 가지 함정을 연달아 밟았다. 넷 다 같은 실패 모양을 만든다. **틀린 명령이 에러 대신 빈 결과를 내고, 빈 결과가 성공으로 해석된다.**
 
-## 사건 — OK가 거짓이었다
-
-문제의 스크립트는 대략 이랬다.
+## 문제의 스크립트
 
 ```bash
 RUNNING=$(aws ecs list-tasks --cluster dev-cluster --query 'taskArns' --output text)
@@ -34,7 +32,7 @@ done
 
 논리는 맞아 보인다. 실제로는 `for` 문이 **한 번만** 돌았고, 그 한 번마저 API 호출이 전부 실패했으며, 실패한 두 값이 서로 같아서 `OK`가 출력됐다.
 
-## (a) zsh는 따옴표 없는 변수를 워드분할하지 않는다
+## 1. zsh는 따옴표 없는 변수를 워드분할하지 않는다
 
 bash에서:
 
@@ -118,7 +116,7 @@ done
 
 AWS CLI는 값이 없을 때 빈 문자열이 아니라 **문자열 `None`을** 내는 경우가 많다. `--output text`에서 특히 그렇다. 둘 다 막아야 한다.
 
-## (b) `--max-items`는 출력에 페이지네이션 토큰을 덧붙인다
+## 2. `--max-items`는 출력에 페이지네이션 토큰을 덧붙인다
 
 최근 태스크정의 두 개만 보려고 했다.
 
@@ -150,7 +148,7 @@ aws ecs list-task-definitions --family-prefix dev-svc-api --sort DESC \
 
 `--no-paginate`로 토큰 출력을 막는 방법도 있지만, 그러면 첫 페이지만 받는다. 목적이 "정렬 후 최근 N개"라면 위처럼 전체를 받아 자르는 쪽이 의도에 맞다.
 
-## (c) `--query`는 자동 페이지네이션 중 페이지마다 적용된다
+## 3. `--query`는 자동 페이지네이션 중 페이지마다 적용된다
 
 4개만 요청했는데 12개가 나온다.
 
@@ -191,7 +189,7 @@ aws ecr list-images --repository-name app/api \
 
 규칙 한 줄로 줄이면 이렇다. **`--query`는 필드 선택에 쓰고, 슬라이싱·집계에는 쓰지 않는다.**
 
-## (d) JMESPath에서 ALB `Priority`는 문자열이다
+## 4. JMESPath에서 ALB `Priority`는 문자열이다
 
 리스너 규칙 중 우선순위 4번을 찾으려 했다.
 
@@ -204,6 +202,8 @@ $
 아무것도 안 나온다. 규칙이 없어서가 아니다.
 
 ELBv2 API는 `Priority`를 **문자열**로 돌려준다(`"4"`). 기본 규칙의 우선순위가 `"default"`이기 때문에 이 필드는 숫자 타입이 될 수 없다. JMESPath의 백틱은 JSON 리터럴이므로 `` `4` ``는 숫자 `4`이고, 문자열 `"4"`와 같지 않다.
+
+### 고침
 
 ```bash
 aws elbv2 describe-rules --listener-arn "$L" \
@@ -220,7 +220,7 @@ aws elbv2 describe-rules --listener-arn "$L" \
 aws elbv2 describe-rules --listener-arn "$L" --output json | head -20
 ```
 
-## 왜 넷을 한 글에 묶었나
+## 넷은 같은 실패 모양을 만든다
 
 넷은 서로 무관한 버그 같지만, 만들어내는 실패 모양이 같다.
 
