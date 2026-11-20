@@ -9,7 +9,7 @@ export function categoryToSlug(category: string): string {
 }
 
 // 인덱스·메뉴에서의 표시 순서. 목록에 없는 카테고리는 뒤에 이름순으로 붙습니다.
-export const CATEGORY_ORDER = ['Java/Kotlin', 'Spring', 'Database', 'DevOps', 'CS', 'ETC'];
+export const CATEGORY_ORDER = ['Java/Kotlin', 'Spring', 'Database', 'DevOps', 'CS', 'AI', 'ETC'];
 
 // 인덱스 카드용 한 줄 설명 (없으면 생략됩니다).
 export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
@@ -18,6 +18,7 @@ export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
 	Database: 'MongoDB·RDBMS와 데이터 다루기',
 	DevOps: '컨테이너·클라우드·인프라',
 	CS: '객체지향·동시성·기초 이론',
+	AI: 'AI 코딩 도구와 개발 방식',
 	ETC: '도구와 환경 설정',
 };
 
