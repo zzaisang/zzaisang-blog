@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <style>
+    .flow  { stroke-dasharray: 6 4; animation: flow 0.8s linear infinite; }
+    .focus { animation: pulse 1.8s ease-in-out infinite; }
+    .blink { animation: blink 1.6s ease-in-out infinite; }
+    @keyframes flow  { to { stroke-dashoffset: -10; } }
+    @keyframes pulse { 50% { stroke-width: 5; } }
+    @keyframes blink { 50% { opacity: 0.35; } }
+    @media (prefers-reduced-motion: reduce) { .flow, .focus, .blink { animation: none; } }
+  </style>
+  <rect width="800" height="250" fill="#fff"/>
+
+  <!-- before -->
+  <text x="30" y="72" font-size="14" font-weight="700" fill="#222939">AI 도입 전</text>
+  <rect x="160" y="50" width="330" height="36" fill="#eef1ff" stroke="#2337ff"/>
+  <text x="325" y="73" text-anchor="middle" font-size="13" fill="#2337ff">작성</text>
+  <rect x="490" y="50" width="180" height="36" fill="#fff8ec" stroke="#c77700"/>
+  <text x="580" y="73" text-anchor="middle" font-size="13" fill="#8a5300">리뷰</text>
+  <rect x="670" y="50" width="90" height="36" fill="#f4f6fa" stroke="#60739f"/>
+  <text x="715" y="73" text-anchor="middle" font-size="13" fill="#222939">병합</text>
+
+  <!-- after -->
+  <text x="30" y="142" font-size="14" font-weight="700" fill="#222939">AI 도입 후</text>
+  <rect x="160" y="120" width="110" height="36" fill="#eef1ff" stroke="#2337ff"/>
+  <text x="215" y="143" text-anchor="middle" font-size="13" fill="#2337ff">작성</text>
+  <rect x="270" y="120" width="360" height="36" fill="#fdecec" stroke="#d23f3f" stroke-width="2" class="focus"/>
+  <text x="450" y="143" text-anchor="middle" font-size="13" font-weight="700" fill="#d23f3f">리뷰 (읽어야 할 코드 증가)</text>
+  <rect x="630" y="120" width="90" height="36" fill="#f4f6fa" stroke="#60739f"/>
+  <text x="675" y="143" text-anchor="middle" font-size="13" fill="#222939">병합</text>
+
+  <!-- annotation -->
+  <line x1="720" y1="166" x2="760" y2="166" stroke="#60739f" stroke-width="2"/>
+  <line x1="720" y1="160" x2="720" y2="172" stroke="#60739f" stroke-width="2"/>
+  <line x1="760" y1="160" x2="760" y2="172" stroke="#60739f" stroke-width="2"/>
+  <text x="740" y="190" text-anchor="middle" font-size="12" fill="#60739f">줄어든 시간</text>
+
+  <text x="400" y="232" text-anchor="middle" font-size="13" font-weight="700" fill="#222939">작성이 줄어든 만큼 리뷰가 늘어, 전체 시간은 크게 줄지 않는다 (개념도)</text>
+</svg>
