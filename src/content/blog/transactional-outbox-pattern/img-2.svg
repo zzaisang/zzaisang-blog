@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60739f"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2337ff"/></marker>
+  </defs>
+  <rect width="800" height="340" fill="#fff"/>
+
+  <!-- transaction boundary -->
+  <text x="20" y="28" font-size="13" font-weight="700" fill="#2337ff">① 하나의 트랜잭션으로 함께 저장 (BEFORE_COMMIT)</text>
+  <rect x="20" y="40" width="300" height="170" rx="10" fill="#f5f7ff" stroke="#2337ff" stroke-dasharray="7 5"/>
+  <rect x="45" y="70" width="250" height="44" rx="8" fill="#fff" stroke="#222939"/>
+  <text x="170" y="97" text-anchor="middle" font-size="14" fill="#222939">비즈니스 테이블 (주문)</text>
+  <rect x="45" y="145" width="250" height="44" rx="8" fill="#fff" stroke="#2337ff" stroke-width="2"/>
+  <text x="170" y="172" text-anchor="middle" font-size="14" font-weight="700" fill="#2337ff">아웃박스 테이블 (PENDING)</text>
+
+  <!-- queue / consumer / external -->
+  <rect x="460" y="145" width="110" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="515" y="172" text-anchor="middle" font-size="14" fill="#222939">SQS 큐</text>
+  <rect x="620" y="145" width="150" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="695" y="172" text-anchor="middle" font-size="14" fill="#222939">컨슈머</text>
+  <rect x="620" y="40" width="150" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="695" y="67" text-anchor="middle" font-size="14" fill="#222939">외부 시스템</text>
+
+  <line x1="295" y1="167" x2="458" y2="167" stroke="#2337ff" stroke-width="2" marker-end="url(#b)"/>
+  <text x="377" y="140" text-anchor="middle" font-size="12" fill="#2337ff">② 커밋 직후 발행</text>
+  <text x="377" y="156" text-anchor="middle" font-size="12" fill="#2337ff">(AFTER_COMMIT)</text>
+  <line x1="570" y1="167" x2="618" y2="167" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="594" y="158" text-anchor="middle" font-size="12" fill="#60739f">③</text>
+  <line x1="695" y1="145" x2="695" y2="86" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="705" y="120" font-size="12" fill="#60739f">④ 처리</text>
+
+  <!-- sweep -->
+  <rect x="460" y="230" width="110" height="40" rx="8" fill="#fff8ec" stroke="#c77700"/>
+  <text x="515" y="255" text-anchor="middle" font-size="14" fill="#8a5300">스윕 잡</text>
+  <polyline points="260,189 260,250 458,250" fill="none" stroke="#c77700" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <text x="360" y="242" text-anchor="middle" font-size="12" fill="#8a5300">오래된 PENDING 조회</text>
+  <line x1="515" y1="230" x2="515" y2="191" stroke="#c77700" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a)"/>
+  <text x="525" y="216" font-size="12" fill="#8a5300">재발행</text>
+
+  <!-- status update -->
+  <polyline points="695,189 695,305 110,305 110,191" fill="none" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="402" y="298" text-anchor="middle" font-size="12" fill="#60739f">⑤ 조건부 상태 갱신 (PENDING → SENT)</text>
+</svg>
