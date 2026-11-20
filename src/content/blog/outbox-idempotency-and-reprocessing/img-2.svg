@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60739f"/></marker>
+  </defs>
+  <rect width="800" height="300" fill="#fff"/>
+
+  <!-- retention window -->
+  <rect x="100" y="95" width="360" height="34" rx="6" fill="#eef1ff" stroke="#2337ff"/>
+  <text x="280" y="117" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">멱등키 보관 시간 (key = 42 기억)</text>
+
+  <!-- axis -->
+  <line x1="60" y1="160" x2="762" y2="160" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <text x="762" y="185" text-anchor="end" font-size="12" fill="#60739f">시간</text>
+
+  <!-- first request -->
+  <circle cx="100" cy="160" r="7" fill="#222939"/>
+  <text x="100" y="72" text-anchor="middle" font-size="13" font-weight="700" fill="#222939">첫 요청</text>
+  <text x="100" y="88" text-anchor="middle" font-size="12" fill="#60739f">key = 42</text>
+
+  <!-- expiry -->
+  <line x1="460" y1="80" x2="460" y2="170" stroke="#2337ff" stroke-dasharray="4 4"/>
+  <text x="460" y="72" text-anchor="middle" font-size="12" fill="#2337ff">만료</text>
+
+  <!-- retry inside -->
+  <circle cx="300" cy="160" r="7" fill="#1f8a4c"/>
+  <text x="300" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#222939">재시도 (key = 42)</text>
+  <text x="300" y="222" text-anchor="middle" font-size="12" fill="#1f8a4c">→ "이미 처리됨" 응답</text>
+  <text x="300" y="242" text-anchor="middle" font-size="13" font-weight="700" fill="#1f8a4c">✓ 발송 1회 유지</text>
+
+  <!-- retry outside -->
+  <circle cx="620" cy="160" r="7" fill="#d23f3f"/>
+  <text x="620" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#222939">재시도 (key = 42)</text>
+  <text x="620" y="222" text-anchor="middle" font-size="12" fill="#d23f3f">→ 새 요청으로 처리</text>
+  <text x="620" y="242" text-anchor="middle" font-size="13" font-weight="700" fill="#d23f3f">✗ 중복 발송</text>
+</svg>
