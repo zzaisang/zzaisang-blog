@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60739f"/></marker>
+  </defs>
+  <rect width="800" height="450" fill="#fff"/>
+
+  <!-- q1 -->
+  <rect x="270" y="20" width="260" height="48" rx="24" fill="#f5f7ff" stroke="#2337ff" stroke-width="2"/>
+  <text x="400" y="50" text-anchor="middle" font-size="15" font-weight="700" fill="#2337ff">재고를 어떻게 관리하나?</text>
+
+  <polyline points="330,68 200,120" fill="none" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <polyline points="470,68 600,120" fill="none" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- models -->
+  <rect x="90" y="122" width="220" height="48" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="200" y="143" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">수량형</text>
+  <text x="200" y="161" text-anchor="middle" font-size="12" fill="#60739f">상품 A 재고 100개</text>
+  <rect x="490" y="122" width="220" height="48" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="600" y="143" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">개별 아이템형</text>
+  <text x="600" y="161" text-anchor="middle" font-size="12" fill="#60739f">좌석 · 쿠폰 코드 · 시리얼</text>
+
+  <line x1="200" y1="170" x2="200" y2="200" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="600" y1="170" x2="600" y2="200" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- answers -->
+  <rect x="90" y="202" width="220" height="48" rx="8" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="2"/>
+  <text x="200" y="231" text-anchor="middle" font-size="14" font-weight="700" fill="#1f8a4c">조건부 UPDATE</text>
+  <rect x="490" y="202" width="220" height="48" rx="8" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="2"/>
+  <text x="600" y="231" text-anchor="middle" font-size="14" font-weight="700" fill="#1f8a4c">FOR UPDATE SKIP LOCKED</text>
+  <text x="200" y="270" text-anchor="middle" font-size="11" fill="#60739f">조회 후 복잡한 검증이 필요하면 비관적 락</text>
+
+  <polyline points="200,280 200,300 360,300 360,318" fill="none" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <polyline points="600,250 600,300 440,300 440,318" fill="none" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- q2 -->
+  <rect x="250" y="320" width="300" height="48" rx="24" fill="#f5f7ff" stroke="#2337ff" stroke-width="2"/>
+  <text x="400" y="350" text-anchor="middle" font-size="14" font-weight="700" fill="#2337ff">순간 트래픽이 DB 한계를 넘나?</text>
+
+  <line x1="250" y1="344" x2="222" y2="390" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="550" y1="344" x2="578" y2="390" stroke="#60739f" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="60" y="392" width="260" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="190" y="419" text-anchor="middle" font-size="13" fill="#222939">아니오 → 여기서 충분</text>
+  <rect x="480" y="392" width="260" height="44" rx="8" fill="#fff8ec" stroke="#c77700"/>
+  <text x="610" y="419" text-anchor="middle" font-size="13" fill="#8a5300">예 → Redis 원자 연산 · 큐를 앞단에</text>
+</svg>

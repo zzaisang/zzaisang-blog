@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <defs>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c77700"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f8a4c"/></marker>
+  </defs>
+  <rect width="800" height="350" fill="#fff"/>
+
+  <!-- panel A -->
+  <text x="40" y="32" font-size="15" font-weight="700" fill="#222939">FOR UPDATE — 잠긴 아이템을 기다린다</text>
+  <rect x="140" y="50" width="120" height="44" rx="8" fill="#fdecec" stroke="#d23f3f" stroke-width="2"/>
+  <text x="200" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#d23f3f">아이템 #1</text>
+  <text x="200" y="86" text-anchor="middle" font-size="11" fill="#d23f3f">T1이 잠금</text>
+  <rect x="290" y="50" width="120" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="350" y="77" text-anchor="middle" font-size="13" fill="#222939">아이템 #2</text>
+  <rect x="440" y="50" width="120" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="500" y="77" text-anchor="middle" font-size="13" fill="#222939">아이템 #3</text>
+  <rect x="590" y="50" width="120" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="650" y="77" text-anchor="middle" font-size="13" fill="#222939">아이템 #4</text>
+  <rect x="150" y="130" width="100" height="32" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="200" y="151" text-anchor="middle" font-size="13" fill="#222939">T2</text>
+  <line x1="200" y1="130" x2="200" y2="97" stroke="#c77700" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#o)"/>
+  <text x="212" y="118" font-size="12" font-weight="700" fill="#8a5300">대기</text>
+
+  <line x1="30" y1="182" x2="770" y2="182" stroke="#e5e9f0" stroke-width="2"/>
+
+  <!-- panel B -->
+  <text x="40" y="215" font-size="15" font-weight="700" fill="#222939">FOR UPDATE SKIP LOCKED — 건너뛰고 다음 것을 잡는다</text>
+  <rect x="140" y="233" width="120" height="44" rx="8" fill="#fdecec" stroke="#d23f3f" stroke-width="2"/>
+  <text x="200" y="253" text-anchor="middle" font-size="13" font-weight="700" fill="#d23f3f">아이템 #1</text>
+  <text x="200" y="269" text-anchor="middle" font-size="11" fill="#d23f3f">T1이 잠금</text>
+  <rect x="290" y="233" width="120" height="44" rx="8" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="2"/>
+  <text x="350" y="253" text-anchor="middle" font-size="13" font-weight="700" fill="#1f8a4c">아이템 #2</text>
+  <text x="350" y="269" text-anchor="middle" font-size="11" fill="#1f8a4c">T2가 잠금</text>
+  <rect x="440" y="233" width="120" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="500" y="260" text-anchor="middle" font-size="13" fill="#222939">아이템 #3</text>
+  <rect x="590" y="233" width="120" height="44" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="650" y="260" text-anchor="middle" font-size="13" fill="#222939">아이템 #4</text>
+  <rect x="300" y="313" width="100" height="32" rx="8" fill="#f4f6fa" stroke="#222939"/>
+  <text x="350" y="334" text-anchor="middle" font-size="13" fill="#222939">T2</text>
+  <line x1="350" y1="313" x2="350" y2="280" stroke="#1f8a4c" stroke-width="2" marker-end="url(#g)"/>
+  <text x="362" y="301" font-size="12" font-weight="700" fill="#1f8a4c">바로 점유 ✓</text>
+  <text x="200" y="301" text-anchor="middle" font-size="12" fill="#60739f">건너뜀</text>
+</svg>
