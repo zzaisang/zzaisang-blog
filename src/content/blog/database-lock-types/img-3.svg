@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <style>
+    .flow  { stroke-dasharray: 6 4; animation: flow 0.8s linear infinite; }
+    .focus { animation: pulse 1.8s ease-in-out infinite; }
+    .blink { animation: blink 1.6s ease-in-out infinite; }
+    @keyframes flow  { to { stroke-dashoffset: -10; } }
+    @keyframes pulse { 50% { stroke-width: 5; } }
+    @keyframes blink { 50% { opacity: 0.35; } }
+    @media (prefers-reduced-motion: reduce) { .flow, .focus, .blink { animation: none; } }
+  </style>
   <rect width="800" height="330" fill="#fff"/>
 
   <!-- guides at records -->
@@ -21,7 +30,7 @@
   <!-- gap lock -->
   <text x="30" y="175" font-size="14" font-weight="700" fill="#222939">갭 락</text>
   <text x="30" y="192" font-size="11" fill="#60739f">(10, 20)  빈 공간만</text>
-  <rect x="250" y="160" width="200" height="26" rx="6" fill="#f2faf5" stroke="#1f8a4c"/>
+  <rect x="250" y="160" width="200" height="26" rx="6" fill="#f2faf5" stroke="#1f8a4c" class="focus"/>
   <circle cx="250" cy="173" r="7" fill="#fff" stroke="#1f8a4c" stroke-width="2"/>
   <circle cx="450" cy="173" r="7" fill="#fff" stroke="#1f8a4c" stroke-width="2"/>
   <text x="350" y="178" text-anchor="middle" font-size="12" fill="#1f8a4c">INSERT 15 차단</text>
@@ -29,7 +38,7 @@
   <!-- record lock -->
   <text x="30" y="230" font-size="14" font-weight="700" fill="#222939">레코드 락</text>
   <text x="30" y="247" font-size="11" fill="#60739f">20 하나</text>
-  <circle cx="450" cy="228" r="11" fill="#2337ff"/>
+  <circle cx="450" cy="228" r="11" fill="#2337ff" class="blink"/>
 
   <!-- index axis -->
   <line x1="190" y1="290" x2="760" y2="290" stroke="#60739f" stroke-width="2"/>
