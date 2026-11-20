@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 270" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <rect width="800" height="270" fill="#fff"/>
+
+  <!-- column 1 -->
+  <rect x="20" y="20" width="240" height="230" rx="12" fill="#f5f7ff" stroke="#2337ff"/>
+  <text x="140" y="52" text-anchor="middle" font-size="16" font-weight="700" fill="#2337ff">① 무엇을 막나</text>
+  <text x="140" y="74" text-anchor="middle" font-size="12" fill="#60739f">락의 모드</text>
+  <rect x="50" y="100" width="180" height="40" rx="20" fill="#fff" stroke="#2337ff"/>
+  <text x="140" y="125" text-anchor="middle" font-size="14" fill="#222939">공유 락 (S)</text>
+  <rect x="50" y="155" width="180" height="40" rx="20" fill="#fff" stroke="#2337ff"/>
+  <text x="140" y="180" text-anchor="middle" font-size="14" fill="#222939">배타 락 (X)</text>
+
+  <!-- column 2 -->
+  <rect x="280" y="20" width="240" height="230" rx="12" fill="#f2faf5" stroke="#1f8a4c"/>
+  <text x="400" y="52" text-anchor="middle" font-size="16" font-weight="700" fill="#1f8a4c">② 어디에 거나</text>
+  <text x="400" y="74" text-anchor="middle" font-size="12" fill="#60739f">락의 범위</text>
+  <rect x="300" y="95" width="95" height="34" rx="17" fill="#fff" stroke="#1f8a4c"/>
+  <text x="347" y="117" text-anchor="middle" font-size="13" fill="#222939">테이블</text>
+  <rect x="405" y="95" width="95" height="34" rx="17" fill="#fff" stroke="#1f8a4c"/>
+  <text x="452" y="117" text-anchor="middle" font-size="13" fill="#222939">레코드</text>
+  <rect x="300" y="140" width="95" height="34" rx="17" fill="#fff" stroke="#1f8a4c"/>
+  <text x="347" y="162" text-anchor="middle" font-size="13" fill="#222939">갭</text>
+  <rect x="405" y="140" width="95" height="34" rx="17" fill="#fff" stroke="#1f8a4c"/>
+  <text x="452" y="162" text-anchor="middle" font-size="13" fill="#222939">넥스트키</text>
+  <text x="400" y="212" text-anchor="middle" font-size="12" fill="#60739f">같은 S/X 락도 범위가 다를 수 있다</text>
+
+  <!-- column 3 -->
+  <rect x="540" y="20" width="240" height="230" rx="12" fill="#fff8ec" stroke="#c77700"/>
+  <text x="660" y="52" text-anchor="middle" font-size="16" font-weight="700" fill="#8a5300">③ 어떻게 다루나</text>
+  <text x="660" y="74" text-anchor="middle" font-size="12" fill="#60739f">애플리케이션 전략</text>
+  <rect x="570" y="100" width="180" height="40" rx="20" fill="#fff" stroke="#c77700"/>
+  <text x="660" y="125" text-anchor="middle" font-size="14" fill="#222939">비관적 락</text>
+  <rect x="570" y="155" width="180" height="40" rx="20" fill="#fff" stroke="#c77700"/>
+  <text x="660" y="180" text-anchor="middle" font-size="14" fill="#222939">낙관적 락</text>
+  <text x="660" y="225" text-anchor="middle" font-size="12" fill="#60739f">비관적 락은 ①②를 사용</text>
+</svg>

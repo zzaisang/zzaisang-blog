@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <rect width="800" height="370" fill="#fff"/>
+  <line x1="400" y1="20" x2="400" y2="350" stroke="#e5e9f0" stroke-width="2"/>
+
+  <!-- pessimistic -->
+  <text x="200" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#222939">비관적 락: 먼저 잠근다</text>
+  <text x="110" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">T1</text>
+  <text x="290" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">T2</text>
+  <line x1="110" y1="70" x2="110" y2="340" stroke="#c9d1e0" stroke-dasharray="4 4"/>
+  <line x1="290" y1="70" x2="290" y2="340" stroke="#c9d1e0" stroke-dasharray="4 4"/>
+
+  <rect x="35" y="80" width="150" height="32" rx="6" fill="#f5f7ff" stroke="#2337ff"/>
+  <text x="110" y="101" text-anchor="middle" font-size="12" fill="#2337ff">FOR UPDATE · 락 획득</text>
+  <rect x="215" y="125" width="150" height="32" rx="6" fill="#fff8ec" stroke="#c77700"/>
+  <text x="290" y="146" text-anchor="middle" font-size="12" fill="#8a5300">FOR UPDATE · 대기</text>
+  <line x1="290" y1="157" x2="290" y2="228" stroke="#c77700" stroke-width="4"/>
+  <rect x="35" y="180" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="110" y="201" text-anchor="middle" font-size="12" fill="#222939">재고 차감 · COMMIT</text>
+  <rect x="215" y="230" width="150" height="32" rx="6" fill="#f5f7ff" stroke="#2337ff"/>
+  <text x="290" y="251" text-anchor="middle" font-size="12" fill="#2337ff">락 획득 · 최신 값 읽음</text>
+  <rect x="215" y="280" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="290" y="301" text-anchor="middle" font-size="12" fill="#222939">재고 차감 · COMMIT</text>
+
+  <!-- optimistic -->
+  <text x="600" y="30" text-anchor="middle" font-size="16" font-weight="700" fill="#222939">낙관적 락: 나중에 확인한다</text>
+  <text x="510" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">T1</text>
+  <text x="690" y="62" text-anchor="middle" font-size="14" font-weight="700" fill="#222939">T2</text>
+  <line x1="510" y1="70" x2="510" y2="340" stroke="#c9d1e0" stroke-dasharray="4 4"/>
+  <line x1="690" y1="70" x2="690" y2="340" stroke="#c9d1e0" stroke-dasharray="4 4"/>
+
+  <rect x="435" y="80" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="510" y="101" text-anchor="middle" font-size="12" fill="#222939">읽기 (version = 1)</text>
+  <rect x="615" y="80" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="690" y="101" text-anchor="middle" font-size="12" fill="#222939">읽기 (version = 1)</text>
+  <rect x="435" y="135" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="510" y="156" text-anchor="middle" font-size="12" fill="#222939">UPDATE … version = 1</text>
+  <rect x="435" y="180" width="150" height="32" rx="6" fill="#eaf6ef" stroke="#1f8a4c"/>
+  <text x="510" y="201" text-anchor="middle" font-size="12" font-weight="700" fill="#1f8a4c">1 row → version 2 ✓</text>
+  <rect x="615" y="230" width="150" height="32" rx="6" fill="#f4f6fa" stroke="#222939"/>
+  <text x="690" y="251" text-anchor="middle" font-size="12" fill="#222939">UPDATE … version = 1</text>
+  <rect x="615" y="280" width="150" height="32" rx="6" fill="#fdecec" stroke="#d23f3f"/>
+  <text x="690" y="301" text-anchor="middle" font-size="12" font-weight="700" fill="#d23f3f">0 row → 충돌 · 재시도</text>
+</svg>
