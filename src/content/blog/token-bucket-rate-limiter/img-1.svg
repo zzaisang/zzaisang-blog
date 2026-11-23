@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 290" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <rect width="800" height="290" fill="#fff"/>
+  <style>
+    .drop  { animation: drop 1.6s ease-in infinite; }
+    .spill { animation: spill 3.2s ease-in infinite; }
+    .flow  { stroke-dasharray: 5 4; animation: flow 0.8s linear infinite; }
+    @keyframes drop  { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(62px); opacity: 1; } 100% { transform: translateY(62px); opacity: 0; } }
+    @keyframes spill { 0%, 30% { transform: translate(0, 0); opacity: 1; } 75% { transform: translate(60px, 50px); opacity: 1; } 100% { transform: translate(60px, 50px); opacity: 0; } }
+    @keyframes flow  { to { stroke-dashoffset: -9; } }
+    @media (prefers-reduced-motion: reduce) { .drop, .spill, .flow { animation: none; } }
+  </style>
+  <defs>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2337ff"/></marker>
+  </defs>
+
+  <!-- ① 충전 -->
+  <rect x="210" y="16" width="200" height="40" rx="8" fill="#f5f7ff" stroke="#2337ff" stroke-width="1.5"/>
+  <text x="310" y="42" text-anchor="middle" font-size="15" fill="#2337ff" font-weight="700">① 충전: 초당 5개</text>
+  <circle class="drop" cx="310" cy="76" r="9" fill="#2337ff"/>
+
+  <!-- 버킷: 테두리 높이 = 용량 -->
+  <path d="M220,150 L220,226 Q220,240 234,240 L386,240 Q400,240 400,226 L400,150" fill="#f4f6fa" stroke="#222939" stroke-width="3"/>
+  <g fill="#2337ff">
+    <circle cx="250" cy="214" r="13"/><circle cx="280" cy="214" r="13"/><circle cx="310" cy="214" r="13"/><circle cx="340" cy="214" r="13"/><circle cx="370" cy="214" r="13"/>
+    <circle cx="250" cy="181" r="13"/><circle cx="280" cy="181" r="13"/><circle cx="310" cy="181" r="13"/><circle cx="340" cy="181" r="13"/><circle cx="370" cy="181" r="13"/>
+  </g>
+  <line x1="208" y1="150" x2="412" y2="150" stroke="#c77700" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="200" y="155" text-anchor="end" font-size="14" fill="#8a5300" font-weight="700">용량 10</text>
+  <text x="310" y="266" text-anchor="middle" font-size="14" fill="#60739f">버킷 (토큰 10개 = 가득 참)</text>
+
+  <!-- ② 넘침 -->
+  <circle class="spill" cx="404" cy="140" r="9" fill="#d23f3f"/>
+  <rect x="490" y="96" width="170" height="56" rx="8" fill="#fdecec" stroke="#d23f3f" stroke-width="1.5"/>
+  <text x="575" y="120" text-anchor="middle" font-size="14" fill="#d23f3f" font-weight="700">② 가득 차면 버림</text>
+  <text x="575" y="140" text-anchor="middle" font-size="12" fill="#d23f3f">10개 넘게 쌓이지 않음</text>
+
+  <!-- ③ 요청 -->
+  <line class="flow" x1="404" y1="214" x2="560" y2="214" stroke="#2337ff" stroke-width="2.5" marker-end="url(#a-blue)"/>
+  <text x="482" y="202" text-anchor="middle" font-size="13" fill="#2337ff">요청 1건 = 토큰 1개</text>
+  <rect x="566" y="180" width="200" height="40" rx="8" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="1.5"/>
+  <text x="666" y="205" text-anchor="middle" font-size="14" fill="#1f8a4c" font-weight="700">③ 토큰 있으면 통과</text>
+  <rect x="566" y="228" width="200" height="40" rx="8" fill="#fdecec" stroke="#d23f3f" stroke-width="1.5"/>
+  <text x="666" y="253" text-anchor="middle" font-size="14" fill="#d23f3f" font-weight="700">토큰 없으면 거절</text>
+</svg>
