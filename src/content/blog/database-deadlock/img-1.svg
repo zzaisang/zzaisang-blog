@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <style>
+    /* 같은 10초 타임라인 위에서 단계 ①~⑤가 차례로 나타나고, 잠시 머문 뒤 반복 */
+    .s1, .s2, .s3, .s4, .s5 { animation: 10s ease-out infinite; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; }
+    .s4 { animation-name: s4; } .s5 { animation-name: s5; }
+    @keyframes s1 { 0% { opacity: 0; }       4% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 15% { opacity: 0; } 19% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 30% { opacity: 0; } 34% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s4 { 0%, 45% { opacity: 0; } 49% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s5 { 0%, 60% { opacity: 0; } 64% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    /* 대기 화살표: 점선이 흘러 원을 그리는 방향을 보여 준다 */
+    .flow { stroke-dasharray: 7 5; animation: flow 0.8s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -12; } }
+    @media (prefers-reduced-motion: reduce) {
+      .s1, .s2, .s3, .s4, .s5, .flow { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f8a4c"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d23f3f"/></marker>
+  </defs>
+  <rect width="800" height="420" fill="#fff"/>
+
+  <!-- rows -->
+  <rect x="320" y="45" width="160" height="56" rx="8" fill="#f4f6fa" stroke="#60739f" stroke-width="2"/>
+  <text x="400" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#222939">stock 행</text>
+  <text x="400" y="90" text-anchor="middle" font-size="13" fill="#60739f">product_id = 1</text>
+  <rect x="320" y="299" width="160" height="56" rx="8" fill="#f4f6fa" stroke="#60739f" stroke-width="2"/>
+  <text x="400" y="324" text-anchor="middle" font-size="15" font-weight="700" fill="#222939">stock 행</text>
+  <text x="400" y="344" text-anchor="middle" font-size="13" fill="#60739f">product_id = 2</text>
+
+  <!-- transactions -->
+  <rect x="60" y="172" width="160" height="56" rx="8" fill="#f5f7ff" stroke="#2337ff" stroke-width="2"/>
+  <text x="140" y="206" text-anchor="middle" font-size="16" font-weight="700" fill="#2337ff">트랜잭션 A</text>
+  <rect x="580" y="172" width="160" height="56" rx="8" fill="#f5f7ff" stroke="#2337ff" stroke-width="2"/>
+  <text x="660" y="206" text-anchor="middle" font-size="16" font-weight="700" fill="#2337ff">트랜잭션 B</text>
+
+  <!-- ① A locks row 1 -->
+  <g class="s1">
+    <line x1="318" y1="92" x2="224" y2="168" stroke="#1f8a4c" stroke-width="3" marker-end="url(#g)"/>
+    <text x="230" y="112" text-anchor="middle" font-size="13" fill="#1f8a4c">① A가 1번 잠금</text>
+  </g>
+  <!-- ② B locks row 2 -->
+  <g class="s2">
+    <line x1="482" y1="308" x2="576" y2="232" stroke="#1f8a4c" stroke-width="3" marker-end="url(#g)"/>
+    <text x="572" y="296" text-anchor="middle" font-size="13" fill="#1f8a4c">② B가 2번 잠금</text>
+  </g>
+  <!-- ③ A waits for row 2 -->
+  <g class="s3">
+    <line class="flow" x1="224" y1="232" x2="318" y2="308" stroke="#d23f3f" stroke-width="3" marker-end="url(#r)"/>
+    <text x="228" y="296" text-anchor="middle" font-size="13" fill="#d23f3f">③ A가 2번 대기</text>
+  </g>
+  <!-- ④ B waits for row 1 -->
+  <g class="s4">
+    <line class="flow" x1="576" y1="168" x2="482" y2="92" stroke="#d23f3f" stroke-width="3" marker-end="url(#r)"/>
+    <text x="572" y="112" text-anchor="middle" font-size="13" fill="#d23f3f">④ B가 1번 대기</text>
+    <text x="400" y="196" text-anchor="middle" font-size="15" font-weight="700" fill="#d23f3f">원형 대기</text>
+    <text x="400" y="216" text-anchor="middle" font-size="12" fill="#60739f">둘 다 끝날 수 없다</text>
+  </g>
+  <!-- ⑤ InnoDB resolves -->
+  <g class="s5">
+    <rect x="150" y="372" width="500" height="34" rx="8" fill="#fff8ec" stroke="#c77700" stroke-width="1.5"/>
+    <text x="400" y="394" text-anchor="middle" font-size="14" fill="#8a5300">⑤ InnoDB가 감지해 한쪽(B)을 롤백하고, A는 계속 진행한다</text>
+  </g>
+</svg>
