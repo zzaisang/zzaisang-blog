@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <style>
+    /* 같은 10초 타임라인 위에서 단계 ①~④가 차례로 나타나고, 잠시 머문 뒤 반복 */
+    .s1, .s2, .s3, .s4 { animation: 10s ease-out infinite; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; } .s4 { animation-name: s4; }
+    @keyframes s1 { 0% { opacity: 0; }       4% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 20% { opacity: 0; } 24% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 40% { opacity: 0; } 44% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s4 { 0%, 60% { opacity: 0; } 64% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .s1, .s2, .s3, .s4 { animation: none; } }
+  </style>
+  <rect width="800" height="400" fill="#fff"/>
+
+  <!-- 시나리오 A: 트랜잭션 안에서 외부 호출 -->
+  <text x="40" y="38" font-size="16" font-weight="700" fill="#222939">트랜잭션 안에서 외부 API 호출</text>
+  <text x="40" y="84" font-size="13" fill="#60739f">DB 커넥션</text>
+  <text x="40" y="124" font-size="13" fill="#60739f">외부 API</text>
+  <g class="s1">
+    <rect x="140" y="66" width="600" height="28" rx="4" fill="#fdecec" stroke="#d23f3f" stroke-width="2"/>
+    <rect x="140" y="66" width="50" height="28" rx="4" fill="#d23f3f"/>
+    <rect x="690" y="66" width="50" height="28" rx="4" fill="#d23f3f"/>
+    <text x="440" y="85" text-anchor="middle" font-size="12" fill="#d23f3f">아무 쿼리도 없는데 커넥션·재고 행 락을 쥐고 기다림</text>
+    <rect x="190" y="106" width="500" height="28" rx="4" fill="#fff8ec" stroke="#c77700" stroke-width="2"/>
+    <text x="440" y="125" text-anchor="middle" font-size="12" fill="#8a5300">① 결제 승인 응답 대기 (5초)</text>
+  </g>
+  <g class="s2">
+    <text x="740" y="160" text-anchor="end" font-size="14" font-weight="700" fill="#d23f3f">② 커넥션 점유 약 6초 · 요청 10개면 풀(10개)이 마른다</text>
+  </g>
+
+  <line x1="40" y1="186" x2="760" y2="186" stroke="#e5e9f0" stroke-width="2"/>
+
+  <!-- 시나리오 B: 트랜잭션을 나눔 -->
+  <text x="40" y="224" font-size="16" font-weight="700" fill="#222939">트랜잭션을 나누고 외부 호출은 밖에서 (방법 1)</text>
+  <text x="40" y="270" font-size="13" fill="#60739f">DB 커넥션</text>
+  <text x="40" y="310" font-size="13" fill="#60739f">외부 API</text>
+  <g class="s3">
+    <rect x="140" y="252" width="50" height="28" rx="4" fill="#1f8a4c"/>
+    <text x="165" y="245" text-anchor="middle" font-size="11" fill="#1f8a4c">트랜잭션 1</text>
+    <rect x="690" y="252" width="50" height="28" rx="4" fill="#1f8a4c"/>
+    <text x="715" y="245" text-anchor="middle" font-size="11" fill="#1f8a4c">트랜잭션 2</text>
+    <text x="440" y="271" text-anchor="middle" font-size="12" fill="#60739f">커넥션 반납 — 다른 요청이 사용</text>
+    <rect x="190" y="292" width="500" height="28" rx="4" fill="#fff8ec" stroke="#c77700" stroke-width="2"/>
+    <text x="440" y="311" text-anchor="middle" font-size="12" fill="#8a5300">③ 결제 승인 응답 대기 (5초, 트랜잭션 밖)</text>
+  </g>
+  <g class="s4">
+    <text x="740" y="346" text-anchor="end" font-size="14" font-weight="700" fill="#1f8a4c">④ 커넥션 점유는 DB 작업 시간만큼만 (짧게 두 번)</text>
+  </g>
+
+  <!-- 시간 축 -->
+  <line x1="140" y1="370" x2="740" y2="370" stroke="#60739f" stroke-width="1.5"/>
+  <g font-size="11" fill="#60739f" text-anchor="middle">
+    <text x="140" y="388">0초</text><text x="240" y="388">1</text><text x="340" y="388">2</text>
+    <text x="440" y="388">3</text><text x="540" y="388">4</text><text x="640" y="388">5</text><text x="740" y="388">6초</text>
+  </g>
+</svg>
