@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 440" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <rect width="800" height="440" fill="#fff"/>
+  <style>
+    .s1, .s2, .s3, .s4 { animation: 10s ease-out infinite; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; } .s4 { animation-name: s4; }
+    @keyframes s1 { 0% { opacity: 0; } 4% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 20% { opacity: 0; } 24% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 40% { opacity: 0; } 44% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @keyframes s4 { 0%, 60% { opacity: 0; } 64% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .s1, .s2, .s3, .s4 { animation: none; } }
+  </style>
+  <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#222939">REPEATABLE READ에서 재고 10을 동시에 1씩 차감</text>
+
+  <!-- 왼쪽: MySQL -->
+  <text x="200" y="66" text-anchor="middle" font-size="16" font-weight="700" fill="#222939">MySQL(InnoDB)</text>
+  <text x="120" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#60739f">T1</text>
+  <text x="280" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#60739f">T2</text>
+  <line x1="120" y1="102" x2="120" y2="330" stroke="#e5e9f0" stroke-width="2"/>
+  <line x1="280" y1="102" x2="280" y2="330" stroke="#e5e9f0" stroke-width="2"/>
+
+  <!-- 오른쪽: PostgreSQL -->
+  <line x1="400" y1="50" x2="400" y2="420" stroke="#e5e9f0" stroke-width="2"/>
+  <text x="600" y="66" text-anchor="middle" font-size="16" font-weight="700" fill="#222939">PostgreSQL</text>
+  <text x="520" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#60739f">T1</text>
+  <text x="680" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#60739f">T2</text>
+  <line x1="520" y1="102" x2="520" y2="330" stroke="#e5e9f0" stroke-width="2"/>
+  <line x1="680" y1="102" x2="680" y2="330" stroke="#e5e9f0" stroke-width="2"/>
+
+  <!-- ① 둘 다 10을 읽음 -->
+  <g class="s1" font-size="13" fill="#222939" text-anchor="middle">
+    <rect x="58" y="112" width="124" height="34" rx="6" fill="#f4f6fa"/><text x="120" y="134">① SELECT → 10</text>
+    <rect x="218" y="112" width="124" height="34" rx="6" fill="#f4f6fa"/><text x="280" y="134">① SELECT → 10</text>
+    <rect x="458" y="112" width="124" height="34" rx="6" fill="#f4f6fa"/><text x="520" y="134">① SELECT → 10</text>
+    <rect x="618" y="112" width="124" height="34" rx="6" fill="#f4f6fa"/><text x="680" y="134">① SELECT → 10</text>
+  </g>
+  <!-- ② T1 UPDATE -->
+  <g class="s2" font-size="13" fill="#222939" text-anchor="middle">
+    <rect x="58" y="164" width="124" height="34" rx="6" fill="#f5f7ff" stroke="#2337ff"/><text x="120" y="186">② UPDATE → 9</text>
+    <rect x="458" y="164" width="124" height="34" rx="6" fill="#f5f7ff" stroke="#2337ff"/><text x="520" y="186">② UPDATE → 9</text>
+  </g>
+  <!-- ③ T1 COMMIT -->
+  <g class="s3" font-size="13" text-anchor="middle">
+    <rect x="58" y="216" width="124" height="34" rx="6" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="2"/><text x="120" y="238" fill="#1f8a4c" font-weight="700">③ COMMIT</text>
+    <rect x="458" y="216" width="124" height="34" rx="6" fill="#eaf6ef" stroke="#1f8a4c" stroke-width="2"/><text x="520" y="238" fill="#1f8a4c" font-weight="700">③ COMMIT</text>
+  </g>
+  <!-- ④ T2 UPDATE: 갈리는 지점 -->
+  <g class="s4" font-size="13" text-anchor="middle">
+    <rect x="210" y="268" width="140" height="50" rx="6" fill="#fff8ec" stroke="#c77700" stroke-width="2"/>
+    <text x="280" y="288" fill="#8a5300" font-weight="700">④ UPDATE → 9</text>
+    <text x="280" y="307" fill="#8a5300">최신 행에 덮어씀</text>
+    <rect x="610" y="268" width="140" height="50" rx="6" fill="#fdecec" stroke="#d23f3f" stroke-width="2"/>
+    <text x="680" y="288" fill="#d23f3f" font-weight="700">④ UPDATE → ERROR</text>
+    <text x="680" y="307" fill="#d23f3f">could not serialize</text>
+
+    <rect x="40" y="348" width="320" height="60" rx="8" fill="#fdecec"/>
+    <text x="200" y="372" fill="#d23f3f" font-size="14" font-weight="700">결과: 재고 9 (2개 팔림)</text>
+    <text x="200" y="394" fill="#222939">갱신 유실이 조용히 일어난다</text>
+    <rect x="440" y="348" width="320" height="60" rx="8" fill="#fff8ec"/>
+    <text x="600" y="372" fill="#8a5300" font-size="14" font-weight="700">결과: 재고 9 (1개 팔림)</text>
+    <text x="600" y="394" fill="#222939">T2는 롤백, 처음부터 재시도해야 한다</text>
+  </g>
+</svg>
