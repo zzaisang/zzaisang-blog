@@ -4,14 +4,13 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import { featuredProjects } from '../utils/projects';
 import { withBase } from '../utils/url';
 
-// 대표 프로젝트 영역 — 콘텐츠가 생기면 아래 본문 주석과 함께 이 3줄도 해제하세요.
-// import ProjectCard from '../components/ProjectCard.astro';
-// import { featuredProjects } from '../utils/projects';
-// const featured = featuredProjects(await getCollection('projects'), 3);
+const featured = featuredProjects(await getCollection('projects'), 3);
 
 const recentPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -153,15 +152,15 @@ const personJsonLd = {
 					Spring·JPA로 백엔드 시스템을 설계하고 만드는 개발자입니다. 마주친 문제와 해결 과정을 기록합니다.
 				</p>
 				<div class="cta">
-					{/* 프로젝트 활성화 시 복구: <a class="btn primary" href={withBase('/projects')}>프로젝트 보기</a> */}
-					<a class="btn primary" href={withBase('/blog')}>글 보러 가기</a>
+					<a class="btn primary" href={withBase('/projects')}>프로젝트 보기</a>
+					<a class="btn" href={withBase('/blog')}>글 보러 가기</a>
 					<a class="btn" href={withBase('/about')}>소개</a>
 				</div>
 				<SocialLinks variant="footer" />
 			</section>
 
-			{/* === 대표 프로젝트 영역 — 콘텐츠 준비되면 복구 ===
-			    프론트매터의 ProjectCard·featuredProjects import 와 featured 상수도 함께 해제하세요.
+			{
+				featured.length > 0 && (
 					<section class="block">
 						<div class="block-head">
 							<h2>대표 프로젝트</h2>
@@ -177,7 +176,8 @@ const personJsonLd = {
 							))}
 						</ul>
 					</section>
-			=== 대표 프로젝트 영역 끝 === */}
+				)
+			}
 
 			{
 				recentPosts.length > 0 && (
