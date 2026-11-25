@@ -58,13 +58,13 @@ const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
 				)
 			}
 			{
-				!data.confidential && data.demoUrl && (
+				data.demoUrl && (
 					<a class="link" href={data.demoUrl} target="_blank" rel="noopener noreferrer">
 						데모
 					</a>
 				)
 			}
-			{data.confidential && <span class="link muted">상세는 요청 시 공유</span>}
+			{data.confidential && <span class="link muted">소스 비공개</span>}
 		</div>
 	</div>
 </article>

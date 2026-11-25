@@ -41,7 +41,7 @@ const jsonLd = {
 	author: { '@type': 'Person', name: SITE_AUTHOR },
 	...(techStack.length ? { keywords: techStack.join(', ') } : {}),
 	...(!confidential && repoUrl ? { codeRepository: repoUrl } : {}),
-	...(!confidential && demoUrl ? { url: demoUrl } : {}),
+	...(demoUrl ? { url: demoUrl } : {}),
 	mainEntityOfPage: canonicalURL.toString(),
 	...(heroImage ? { image: new URL(heroImage.src, canonicalURL).toString() } : {}),
 };
@@ -196,7 +196,7 @@ const jsonLd = {
 								)
 							}
 							{
-								!confidential && demoUrl && (
+								demoUrl && (
 									<a href={demoUrl} target="_blank" rel="noopener noreferrer">
 										데모 ↗
 									</a>
