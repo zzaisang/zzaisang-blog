@@ -62,16 +62,15 @@ const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
 	.pagination {
 		display: flex;
 		align-items: center;
-		justify-content: center;
 		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin: 3rem 0 1rem;
+		gap: 4px;
+		margin: 0 0 64px;
+		font-size: 15px;
 	}
 	.pagination ul {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.3rem;
+		gap: 4px;
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -81,25 +80,20 @@ const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 2.3rem;
-		height: 2.3rem;
-		padding: 0 0.6rem;
-		border-radius: 8px;
-		color: rgb(var(--black));
-		text-decoration: none;
-		font-size: 0.95rem;
-		line-height: 1;
-		transition: 0.2s ease;
+		min-width: 2.2rem;
+		height: 2.2rem;
+		color: rgb(var(--gray));
+		font-variant-numeric: tabular-nums;
 	}
 	.num:hover,
 	.arrow:not(.disabled):hover {
-		background: rgb(var(--gray-light));
 		color: var(--accent);
 	}
 	.num.current {
-		background: var(--accent);
-		color: var(--accent-contrast);
-		font-weight: 700;
+		color: rgb(var(--black));
+		font-weight: 600;
+		text-decoration: underline;
+		text-underline-offset: 4px;
 	}
 	.arrow.disabled {
 		color: rgb(var(--gray-light));

@@ -1,0 +1,140 @@
+---
+// 연도별로 묶은 글 행 목록(홈·글 목록·카테고리 공용).
+// 왼쪽에 큰 연도 숫자, 오른쪽에 "날짜 | 제목 | 카테고리" 행. 글은 pubDate 내림차순으로 넘깁니다.
+import type { CollectionEntry } from 'astro:content';
+import { categoryToSlug } from '../utils/categories';
+import { withBase } from '../utils/url';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	posts: CollectionEntry<'blog'>[];
+	/** 첫 글(최신 1편)에만 설명을 붙입니다. */
+	describeFirst?: boolean;
+	/** 카테고리 열 표시(카테고리 상세에선 모두 같은 값이라 끕니다). */
+	showCategory?: boolean;
+}
+
+const { posts, describeFirst = false, showCategory = true } = Astro.props;
+
+const groups: { year: number; posts: CollectionEntry<'blog'>[] }[] = [];
+for (const post of posts) {
+	const year = post.data.pubDate.getUTCFullYear();
+	const last = groups.at(-1);
+	if (last?.year === year) last.posts.push(post);
+	else groups.push({ year, posts: [post] });
+}
+const first = posts[0];
+---
+
+{
+	groups.map((group, i) => (
+		<section class="year-group">
+			<h2 class="year">{group.year}</h2>
+			<div>
+				<ol class:list={['rows', { 'no-cat': !showCategory }]}>
+					{group.posts.map((post) => (
+						<li>
+							<span class="date">
+								<FormattedDate date={post.data.pubDate} format="short" />
+							</span>
+							<a class="title" href={withBase(`/blog/${post.id}/`)}>
+								<span>{post.data.title}</span>
+								{describeFirst && post === first && (
+									<span class="desc">{post.data.description}</span>
+								)}
+							</a>
+							{showCategory && (
+								<span class="cat">
+									{post.data.category && (
+										<a href={withBase(`/categories/${categoryToSlug(post.data.category)}/`)}>
+											{post.data.category}
+										</a>
+									)}
+								</span>
+							)}
+						</li>
+					))}
+				</ol>
+				{i === groups.length - 1 && <slot />}
+			</div>
+		</section>
+	))
+}
+
+<style>
+	.year-group {
+		display: grid;
+		grid-template-columns: 200px minmax(0, 1fr);
+		gap: 40px;
+		padding-bottom: 64px;
+	}
+	.year {
+		margin: 0;
+		font-size: 88px;
+		line-height: 1;
+		font-weight: 300;
+		color: rgb(var(--year));
+		letter-spacing: -0.04em;
+		font-variant-numeric: tabular-nums;
+	}
+	.rows {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-size: 17px;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.rows li {
+		display: grid;
+		grid-template-columns: 96px minmax(0, 1fr) 120px;
+		gap: 24px;
+		padding: 14px 0;
+		border-top: 1px solid rgb(var(--gray-light));
+		align-items: baseline;
+	}
+	.rows.no-cat li {
+		grid-template-columns: 96px minmax(0, 1fr);
+	}
+	.date {
+		color: rgb(var(--gray));
+		font-size: 14px;
+		font-variant-numeric: tabular-nums;
+	}
+	.title {
+		font-weight: 500;
+	}
+	.title > span {
+		display: block;
+	}
+	.desc {
+		margin-top: 4px;
+		font-size: 15px;
+		font-weight: 400;
+		color: rgb(var(--gray));
+		line-height: 1.6;
+	}
+	.cat {
+		font-size: 14px;
+		text-align: right;
+	}
+	.cat a {
+		color: rgb(var(--gray));
+	}
+	.cat a:hover {
+		color: var(--accent);
+	}
+	@media (max-width: 720px) {
+		.year-group {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 8px;
+		}
+		.rows li,
+		.rows.no-cat li {
+			grid-template-columns: 72px minmax(0, 1fr);
+			gap: 12px;
+		}
+		.cat {
+			display: none;
+		}
+	}
+</style>

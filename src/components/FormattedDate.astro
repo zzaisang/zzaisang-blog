@@ -1,17 +1,18 @@
 ---
 interface Props {
 	date: Date;
+	/** long: "2026년 11월 25일", short(목록용): "11월 25일" */
+	format?: 'long' | 'short';
 }
 
-const { date } = Astro.props;
+const { date, format = 'long' } = Astro.props;
+// frontmatter 날짜는 UTC 자정으로 파싱되므로 UTC 기준으로 표기해 빌드 환경 TZ 와 무관하게 맞춥니다.
+const label = date.toLocaleDateString('ko-KR', {
+	timeZone: 'UTC',
+	...(format === 'long' ? { year: 'numeric' } : {}),
+	month: 'long',
+	day: 'numeric',
+});
 ---
 
-<time datetime={date.toISOString()}>
-	{
-		date.toLocaleDateString('en-us', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-		})
-	}
-</time>
+<time datetime={date.toISOString()}>{label}</time>

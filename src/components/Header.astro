@@ -1,75 +1,41 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
-import SocialLinks from './SocialLinks.astro';
 import { withBase } from '../utils/url';
 ---
 
-<header>
-	<nav>
-		<h2><a href={withBase('/')}>{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/projects">Projects</HeaderLink>
-			<HeaderLink href="/categories">Categories</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-		<SocialLinks variant="header" />
+<header class="wrap">
+	<a class="brand" href={withBase('/')}>{SITE_TITLE}</a>
+	<nav aria-label="주 메뉴">
+		<HeaderLink href="/blog">글</HeaderLink>
+		<HeaderLink href="/categories">카테고리</HeaderLink>
+		<HeaderLink href="/projects">프로젝트</HeaderLink>
+		<HeaderLink href="/about">소개</HeaderLink>
 	</nav>
 </header>
 <style>
 	header {
-		margin: 0;
-		padding: 0 1em;
-		background: rgb(var(--bg));
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 12px;
+		padding-top: 28px;
+		padding-bottom: 28px;
 	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
-
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
+	.brand {
+		font-weight: 600;
+		font-size: 18px;
+		letter-spacing: -0.01em;
 	}
 	nav {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
+		gap: 28px;
+		font-size: 15px;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: rgb(var(--black));
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	/* 모바일: 사이트명은 첫 줄, 메뉴는 둘째 줄 한 줄로. 폭이 모자라면 가로 스크롤. */
 	@media (max-width: 720px) {
 		nav {
-			flex-wrap: wrap;
-		}
-		h2 {
-			width: 100%;
-		}
-		h2 a {
-			display: block;
-			padding: 0.8em 0.5em 0.2em;
-		}
-		.internal-links {
-			display: flex;
-			width: 100%;
-			overflow-x: auto;
-			white-space: nowrap;
-		}
-		nav .internal-links a {
-			padding: 0.6em 0.4em;
-			font-size: 0.9em;
+			gap: 16px;
 		}
 	}
 </style>

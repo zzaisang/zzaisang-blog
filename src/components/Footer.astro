@@ -1,19 +1,26 @@
 ---
-import SocialLinks from './SocialLinks.astro';
 import { SITE_TITLE } from '../consts';
+import { withBase } from '../utils/url';
 
 const today = new Date();
 ---
 
-<footer>
-	&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.
-	<SocialLinks variant="footer" />
+<footer class="wrap">
+	<span>&copy; {today.getFullYear()} {SITE_TITLE}</span>
+	<a href={withBase('/rss.xml')}>RSS</a>
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 8px;
+		padding-top: 32px;
+		padding-bottom: 40px;
+		font-size: 13px;
 		color: rgb(var(--gray));
-		text-align: center;
+	}
+	a {
+		color: rgb(var(--gray));
 	}
 </style>
