@@ -238,3 +238,44 @@ hr {
 		gap: 24px;
 	}
 }
+
+/* 글·프로젝트 상세 본문. 마크다운이 그대로 들어오므로 전역으로 둡니다. */
+.prose {
+	font-size: 17px;
+	line-height: 1.85;
+}
+.prose p {
+	margin: 0 0 1.3em;
+}
+.prose h2 {
+	margin: 48px 0 16px;
+	font-size: 24px;
+	scroll-margin-top: 24px;
+}
+.prose h3 {
+	margin: 36px 0 12px;
+	font-size: 20px;
+	scroll-margin-top: 24px;
+}
+.prose h4 {
+	margin: 28px 0 8px;
+}
+.prose ul,
+.prose ol {
+	margin: 0 0 1.3em;
+	padding-left: 1.3em;
+}
+.prose li + li {
+	margin-top: 8px;
+}
+.prose a {
+	color: var(--accent);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+.prose a:hover {
+	color: rgb(var(--black));
+}
+.prose img {
+	margin: 8px 0 1.3em;
+}

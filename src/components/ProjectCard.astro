@@ -16,7 +16,7 @@ const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
 <article class="card">
 	<TitleTag class="title"><a href={withBase(`/projects/${id}/`)}>{data.title}</a></TitleTag>
 	<p class="summary">{data.summary}</p>
-	{data.techStack.length > 0 && <p class="stack">{data.techStack.join(' · ')}</p>}
+	{data.techStack.length > 0 && <p class="stack">{data.techStack.slice(0, 3).join(' · ')}</p>}
 </article>
 
 <style>
