@@ -4,7 +4,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import PostList from '../components/PostList.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import ProjectList from '../components/ProjectList.astro';
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
 import { featuredProjects } from '../utils/projects';
 import { withBase } from '../utils/url';
@@ -14,7 +14,7 @@ const featured = featuredProjects(projects, 3);
 
 const recentPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 10);
+	.slice(0, 6);
 
 const github = SOCIAL_LINKS.find((l) => l.icon === 'github' && l.href);
 
@@ -37,11 +37,11 @@ const personJsonLd = {
 		<style>
 			.intro {
 				padding-top: 72px;
-				padding-bottom: 88px;
+				padding-bottom: 72px;
 			}
 			.intro h1 {
 				margin: 0;
-				max-width: 22em;
+				max-width: 24em;
 				font-size: 30px;
 				line-height: 1.5;
 				font-weight: 400;
@@ -55,37 +55,21 @@ const personJsonLd = {
 				margin: 20px 0 0;
 				font-size: 15px;
 			}
-			.intro-links a,
-			.all {
+			.intro-links a {
 				color: var(--accent);
 			}
-			.intro-links a:hover,
-			.all:hover {
+			.intro-links a:hover {
 				color: rgb(var(--black));
 			}
-			.recent {
-				padding-bottom: 32px;
-			}
-			.all {
-				display: inline-block;
-				margin-top: 24px;
-				font-size: 15px;
-			}
-			.made {
-				background: rgb(var(--surface));
-				padding: 72px 0 88px;
-			}
-			.made h2 {
-				margin: 0 0 32px;
-				font-size: 15px;
-				font-weight: 600;
+			.last {
+				padding-bottom: 96px;
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section class="wrap intro">
+		<main class="wrap">
+			<section class="intro">
 				<h1>Spring·JPA로 백엔드를 만듭니다. 운영하다 막힌 지점과 고친 방법을 적어 둡니다.</h1>
 				<p class="intro-links">
 					{
@@ -95,36 +79,31 @@ const personJsonLd = {
 							</a>
 						)
 					}
-					{projects.length > 0 && <a href={withBase('/projects')}>프로젝트 {projects.length}개</a>}
+					<a href={withBase('/blog')}>글 전체</a>
 					<a href={withBase('/about')}>소개</a>
 				</p>
 			</section>
 
 			{
 				recentPosts.length > 0 && (
-					<div class="wrap recent">
-						<PostList posts={recentPosts} describeFirst>
-							<a class="all" href={withBase('/blog')}>
-								전체 글 보기
-							</a>
-						</PostList>
-					</div>
+					<PostList posts={recentPosts} describeFirst heading="최근 글">
+						<a slot="aside" class="more" href={withBase('/blog')}>
+							전체 글 보기
+						</a>
+					</PostList>
 				)
 			}
 
 			{
 				featured.length > 0 && (
-					<section class="made">
-						<div class="wrap">
-							<h2>만든 것</h2>
-							<ul class="proj-grid">
-								{featured.map((project) => (
-									<li>
-										<ProjectCard project={project} headingLevel={3} />
-									</li>
-								))}
-							</ul>
+					<section class="section last">
+						<div class="section-aside">
+							<h2 class="section-label">만든 것</h2>
+							<a class="more" href={withBase('/projects')}>
+								프로젝트 {projects.length}개
+							</a>
 						</div>
+						<ProjectList projects={featured} />
 					</section>
 				)
 			}

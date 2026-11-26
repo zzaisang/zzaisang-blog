@@ -1,27 +1,168 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import ProjectList from '../components/ProjectList.astro';
+import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
+import { CATEGORY_DESCRIPTIONS, categoryToSlug, sortCategories } from '../utils/categories';
+import { sortProjects } from '../utils/projects';
+import { withBase } from '../utils/url';
+
+const posts = await getCollection('blog');
+const counts = new Map<string, number>();
+for (const post of posts) {
+	const cat = post.data.category;
+	if (cat) counts.set(cat, (counts.get(cat) ?? 0) + 1);
+}
+const categories = sortCategories([...counts.keys()]);
+const projects = sortProjects(await getCollection('projects'));
+const contacts = SOCIAL_LINKS.filter((l) => l.href);
 ---
 
-<Layout
-	title="소개"
-	description="zzaisang과 이 블로그에 대한 소개입니다."
-	pubDate={new Date('2026-06-18')}
->
-	<p>
-		안녕하세요, <strong>zzaisang</strong>입니다. 👋<br />
-		개발하면서 배운 것과 삽질의 기록, 그리고 가끔의 일상을 남기는 공간입니다. Tistory에서
-		운영하던 블로그를 직접 관리할 수 있는 형태로 옮겨 왔습니다.
-	</p>
+<!doctype html>
+<html lang="ko">
+	<head>
+		<BaseHead title={`소개 · ${SITE_TITLE}`} description="zzaisang과 이 블로그에 대한 소개입니다." />
+		<style>
+			.lead {
+				margin: 0;
+				padding-top: 14px;
+				max-width: 36em;
+				font-size: 17px;
+				line-height: 1.85;
+			}
+			.lead + .lead {
+				padding-top: 0;
+				margin-top: 1em;
+			}
+			.rows {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				font-size: 17px;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+			.rows li {
+				display: grid;
+				grid-template-columns: 160px minmax(0, 1fr) 72px;
+				gap: 24px;
+				padding: 14px 0;
+				border-top: 1px solid rgb(var(--gray-light));
+				align-items: baseline;
+			}
+			.rows.two li {
+				grid-template-columns: 160px minmax(0, 1fr);
+			}
+			.name {
+				font-weight: 500;
+			}
+			.desc,
+			.count {
+				font-size: 14px;
+				color: rgb(var(--gray));
+			}
+			.count {
+				text-align: right;
+				font-variant-numeric: tabular-nums;
+			}
+			.rows a.ext {
+				color: var(--accent);
+				font-size: 15px;
+			}
+			.section:last-child {
+				padding-bottom: 96px;
+			}
+			@media (max-width: 720px) {
+				.rows li,
+				.rows.two li {
+					grid-template-columns: minmax(0, 1fr) auto;
+					gap: 4px 12px;
+				}
+				.desc {
+					grid-column: 1 / -1;
+					grid-row: 2;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="wrap">
+			<div class="page-head">
+				<h1>소개</h1>
+				<p>zzaisang의 개발 기록과 만든 것들</p>
+			</div>
 
-	<h2>이 블로그에서 다루는 것</h2>
-	<ul>
-		<li><strong>개발</strong> — 작업하며 마주친 문제와 해결 과정</li>
-		<li><strong>회고</strong> — 배운 것과 시행착오 정리</li>
-		<li><strong>일상</strong> — 기록해 두고 싶은 순간들</li>
-	</ul>
+			<section class="section">
+				<h2 class="section-label">하는 일</h2>
+				<div>
+					<p class="lead">
+						Spring·JPA로 백엔드 시스템을 설계하고 만듭니다. 운영하다 막힌 지점과 고친 방법을 글로 남기고, 직접
+						쓰려고 작은 앱과 도구를 만듭니다.
+					</p>
+					<p class="lead">
+						이 블로그는 Tistory에서 운영하던 글을 직접 관리할 수 있는 형태로 옮겨 온 곳입니다.
+					</p>
+				</div>
+			</section>
 
-	<h2>연락</h2>
-	<ul>
-		<li>GitHub — <a href="https://github.com/zzaisang">github.com/zzaisang</a></li>
-	</ul>
-</Layout>
+			{
+				categories.length > 0 && (
+					<section class="section">
+						<div class="section-aside">
+							<h2 class="section-label">다루는 것</h2>
+							<a class="more" href={withBase('/categories')}>
+								카테고리 전체
+							</a>
+						</div>
+						<ul class="rows">
+							{categories.map((cat) => (
+								<li>
+									<a class="name" href={withBase(`/categories/${categoryToSlug(cat)}/`)}>
+										{cat}
+									</a>
+									<span class="desc">{CATEGORY_DESCRIPTIONS[cat]}</span>
+									<span class="count">{counts.get(cat)}개</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
+
+			{
+				projects.length > 0 && (
+					<section class="section">
+						<div class="section-aside">
+							<h2 class="section-label">만든 것</h2>
+							<a class="more" href={withBase('/projects')}>
+								프로젝트 전체
+							</a>
+						</div>
+						<ProjectList projects={projects} />
+					</section>
+				)
+			}
+
+			{
+				contacts.length > 0 && (
+					<section class="section">
+						<h2 class="section-label">연락</h2>
+						<ul class="rows two">
+							{contacts.map((link) => (
+								<li>
+									<span class="name">{link.name}</span>
+									<a class="ext" href={link.href} target="_blank" rel="noopener noreferrer">
+										{link.href.replace(/^https?:\/\//, '')}
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				)
+			}
+		</main>
+		<Footer />
+	</body>
+</html>
