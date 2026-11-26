@@ -5,11 +5,12 @@ role: "1인 개발"
 pubDate: "2026-06-08T00:00:00+09:00"
 techStack: ["TypeScript", "Chrome Extension MV3", "Vite", "CRXJS", "Vitest"]
 projectType: "personal"
-status: "wip"
+status: "shipped"
 featured: true
 order: 3
 teamSize: "1인"
 repoUrl: "https://github.com/zzaisang/routinetabs"
+demoUrl: "https://chromewebstore.google.com/detail/routinetabs/jhkpnjoakkeimnelcpfoaofckpjlkmdo"
 heroImage: "./img-1.png"
 ---
 
@@ -19,7 +20,7 @@ heroImage: "./img-1.png"
 
 ## 내가 한 일
 
-혼자 설계·구현했다. 스케줄 엔진, 서비스 워커, 팝업·옵션 화면, 다국어, 개인정보처리방침과 스토어 등록 문구까지 준비했다.
+혼자 설계·구현했다. 스케줄 엔진, 서비스 워커, 팝업·옵션 화면, 다국어, 개인정보처리방침과 스토어 등록까지 마쳤다.
 
 ## 주요 기능
 
@@ -42,4 +43,4 @@ heroImage: "./img-1.png"
 
 확장 프로그램의 신뢰성은 **워커가 죽었다 살아나는 상황을 기본값으로 두는 것**에서 나온다. 리스너를 모듈 최상단에서 동기적으로 등록하고, 설치·시작 때 저장소에서 알람을 다시 만드는 이유도 여기에 있다.
 
-Chrome 웹 스토어 등록은 아직 하지 않았다. 지금은 빌드한 뒤 개발자 모드로 직접 로드해 쓴다.
+Chrome 웹 스토어에 등록해 누구나 설치할 수 있다.
