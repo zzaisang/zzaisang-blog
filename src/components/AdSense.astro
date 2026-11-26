@@ -22,13 +22,22 @@ const {
 	class: className,
 } = Astro.props;
 
-// 게시자 ID 와 슬롯이 모두 있을 때만 렌더링 (미설정 시 깨진 광고 요청 방지)
+// 게시자 ID 와 슬롯이 모두 있을 때만 렌더링 (미설정 시 깨진 광고 요청 방지).
+// 광고 로더(adsbygoogle.js)도 여기서만 넣습니다. 전역 <head> 에 두면 광고 단위가 없는 홈·목록·소개에서도
+// 로더가 실려 자동 광고(Auto ads)가 붙을 수 있으므로, 이 컴포넌트를 쓰는 글 상세(BlogPost)에만 싣습니다.
+// 한 페이지에 이 컴포넌트는 한 번만 둡니다.
 const enabled = Boolean(ADSENSE_CLIENT && slot);
 ---
 
 {
 	enabled && (
 		<div class:list={['adsense', className]} aria-hidden="true">
+			<script
+				async
+				src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+				crossorigin="anonymous"
+				is:inline
+			/>
 			<ins
 				class="adsbygoogle"
 				style={style}
