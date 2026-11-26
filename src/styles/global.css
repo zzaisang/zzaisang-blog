@@ -200,3 +200,41 @@ hr {
 	clip-path: inset(50%);
 	white-space: nowrap;
 }
+
+/* 목록 페이지 머리(글·카테고리·프로젝트): 홈 소개 문장과 같은 30px 한 줄 + 보조 설명. */
+.page-head {
+	padding-top: 72px;
+	padding-bottom: 56px;
+}
+.page-head h1 {
+	margin: 0;
+	font-size: 30px;
+	font-weight: 400;
+	letter-spacing: -0.02em;
+}
+.page-head p {
+	margin: 12px 0 0;
+	font-size: 15px;
+	color: rgb(var(--gray));
+}
+.page-head .back {
+	display: inline-block;
+	margin-bottom: 12px;
+	font-size: 14px;
+	color: rgb(var(--gray));
+}
+/* 프로젝트 3열 그리드(홈 "만든 것"·/projects). */
+.proj-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 40px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+@media (max-width: 720px) {
+	.proj-grid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 24px;
+	}
+}

@@ -21,73 +21,61 @@ const categories = sortCategories([...counts.keys()]);
 	<head>
 		<BaseHead title={`카테고리 · ${SITE_TITLE}`} description="주제별로 모아 보는 글 목록" />
 		<style>
-			main {
-				width: 960px;
-				max-width: calc(100% - 2em);
-			}
-			h1 {
-				margin-bottom: 0.2em;
-			}
-			.sub {
-				margin-top: 0;
-				color: rgb(var(--gray));
-			}
-			.grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-				grid-auto-rows: 1fr;
-				gap: 1rem;
-				margin-top: 2rem;
-				padding: 0;
+			.rows {
 				list-style: none;
+				margin: 0 0 96px;
+				padding: 0;
+				font-size: 17px;
+				border-bottom: 1px solid rgb(var(--gray-light));
 			}
-			.grid > li {
+			.rows li {
 				display: grid;
-			}
-			.card {
-				display: block;
-				padding: 1.2rem 1.4rem;
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: 12px;
-				text-decoration: none;
-				color: inherit;
-				transition: 0.2s ease;
-			}
-			.card:hover {
-				border-color: var(--accent);
-				box-shadow: var(--box-shadow);
+				grid-template-columns: 200px minmax(0, 1fr) 80px;
+				gap: 24px;
+				padding: 14px 0;
+				border-top: 1px solid rgb(var(--gray-light));
+				align-items: baseline;
 			}
 			.name {
-				margin: 0;
-				color: rgb(var(--black));
-				font-size: 1.25rem;
+				font-weight: 500;
+			}
+			.desc,
+			.count {
+				font-size: 14px;
+				color: rgb(var(--gray));
 			}
 			.count {
-				color: var(--accent);
-				font-weight: 700;
+				text-align: right;
+				font-variant-numeric: tabular-nums;
 			}
-			.desc {
-				margin: 0.4em 0 0;
-				color: rgb(var(--gray));
-				font-size: 0.9rem;
+			@media (max-width: 720px) {
+				.rows li {
+					grid-template-columns: minmax(0, 1fr) auto;
+					gap: 4px 12px;
+				}
+				.desc {
+					grid-column: 1 / -1;
+					grid-row: 2;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<h1>카테고리</h1>
-			<p class="sub">주제별로 모아 보는 전체 {posts.length}개의 글</p>
-			<ul class="grid">
+		<main class="wrap">
+			<div class="page-head">
+				<h1>카테고리</h1>
+				<p>주제별로 모아 보는 전체 {posts.length}개의 글</p>
+			</div>
+			<ul class="rows">
 				{
 					categories.map((cat) => (
 						<li>
-							<a class="card" href={withBase(`/categories/${categoryToSlug(cat)}/`)}>
-								<p class="name">
-									{cat} <span class="count">{counts.get(cat)}</span>
-								</p>
-								{CATEGORY_DESCRIPTIONS[cat] && <p class="desc">{CATEGORY_DESCRIPTIONS[cat]}</p>}
+							<a class="name" href={withBase(`/categories/${categoryToSlug(cat)}/`)}>
+								{cat}
 							</a>
+							<span class="desc">{CATEGORY_DESCRIPTIONS[cat]}</span>
+							<span class="count">{counts.get(cat)}개</span>
 						</li>
 					))
 				}

@@ -3,11 +3,11 @@ import type { GetStaticPaths } from 'astro';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
-import FormattedDate from '../../../components/FormattedDate.astro';
 import Header from '../../../components/Header.astro';
 import Pagination from '../../../components/Pagination.astro';
+import PostList from '../../../components/PostList.astro';
 import { POSTS_PER_PAGE, SITE_TITLE } from '../../../consts';
-import { categoryToSlug } from '../../../utils/categories';
+import { CATEGORY_DESCRIPTIONS, categoryToSlug } from '../../../utils/categories';
 import { withBase } from '../../../utils/url';
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -27,6 +27,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page, category } = Astro.props;
 const pageSuffix = page.currentPage > 1 ? ` - ${page.currentPage}페이지` : '';
+const description = CATEGORY_DESCRIPTIONS[category];
 ---
 
 <!doctype html>
@@ -36,75 +37,16 @@ const pageSuffix = page.currentPage > 1 ? ` - ${page.currentPage}페이지` : ''
 			title={`${category}${pageSuffix} · ${SITE_TITLE}`}
 			description={`${category} 카테고리의 글 ${page.total}개`}
 		/>
-		<style>
-			main {
-				width: 760px;
-				max-width: calc(100% - 2em);
-			}
-			.head {
-				margin-bottom: 2rem;
-			}
-			.back {
-				color: rgb(var(--gray));
-				text-decoration: none;
-				font-size: 0.9rem;
-			}
-			.back:hover {
-				color: var(--accent);
-			}
-			.head h1 {
-				margin: 0.3em 0 0;
-			}
-			.head .count {
-				color: rgb(var(--gray));
-				font-weight: 400;
-			}
-			ul {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-			}
-			li {
-				padding: 0.9rem 0;
-				border-bottom: 1px solid rgb(var(--gray-light));
-			}
-			.post-title {
-				color: rgb(var(--black));
-				text-decoration: none;
-				font-size: 1.1rem;
-			}
-			.post-title:hover {
-				color: var(--accent);
-			}
-			.date {
-				display: block;
-				margin-top: 0.2em;
-				color: rgb(var(--gray));
-				font-size: 0.85rem;
-			}
-		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<div class="head">
+		<main class="wrap">
+			<div class="page-head">
 				<a class="back" href={withBase('/categories')}>← 카테고리</a>
-				<h1>{category} <span class="count">({page.total})</span></h1>
+				<h1>{category}</h1>
+				<p>{description ? `${description} · ` : ''}글 {page.total}개</p>
 			</div>
-			<ul>
-				{
-					page.data.map((post) => (
-						<li>
-							<a class="post-title" href={withBase(`/blog/${post.id}/`)}>
-								{post.data.title}
-							</a>
-							<span class="date">
-								<FormattedDate date={post.data.pubDate} />
-							</span>
-						</li>
-					))
-				}
-			</ul>
+			<PostList posts={page.data} showCategory={false} />
 			<Pagination
 				currentPage={page.currentPage}
 				lastPage={page.lastPage}
