@@ -4,7 +4,20 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
 
-// 카테고리·프로젝트 목록은 각 페이지에 있으므로 여기선 하는 일과 연락만 둡니다.
+// 카테고리·프로젝트 목록은 각 페이지에 있으므로 여기선 하는 일·경력·기술·연락만 둡니다.
+// 경력은 회사당 한 줄만 둡니다(세부 프로젝트는 이력서 몫).
+const career = [
+	{ company: '라온메디', period: '2023.02 – 현재', summary: '치과·기공소 B2B 주문 플랫폼 개발 리드, 교정 소프트웨어 구독 플랫폼 백엔드 구축' },
+	{ company: '인덴트코퍼레이션', period: '2022.07 – 2022.12', summary: 'Python 서비스의 Kotlin·Spring Boot 전환과 CDC 동기화 파이프라인 구축' },
+	{ company: '구하다', period: '2022.02 – 2022.06', summary: '알림톡 발송 이벤트 기반 전환, 물류 IoT 데이터 수집·경보 구축' },
+	{ company: '의식주컴퍼니', period: '2019.03 – 2022.02', summary: '런드리고 백엔드 API 개편, 재고·주문 동시성 처리, 배포·APM 등 사내 인프라 구축' },
+	{ company: '모닝인', period: '2018.03 – 2019.03', summary: '나이스평가정보 파견, 기업정보 웹 서비스 유지보수와 신규 개발' },
+	{ company: '피엘시스템즈', period: '2016.12 – 2018.01', summary: '위택스 지방세 정보시스템 파견, 파일 기반 데이터 적재 프로그램 개발' },
+];
+const stack = [
+	'Java', 'Kotlin', 'Spring Boot', 'Spring Security', 'Spring Batch', 'Spring Cloud', 'JPA', 'jOOQ',
+	'PostgreSQL', 'MongoDB', 'Redis', 'DynamoDB', 'Kafka', 'Flyway', 'AWS', 'CloudWatch', 'Sentry',
+];
 const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 	const isMail = l.href.startsWith('mailto:');
 	return { ...l, isMail, label: l.href.replace(/^(https?:\/\/|mailto:)/, '') };
@@ -52,13 +65,37 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 			.rows a:hover {
 				color: rgb(var(--black));
 			}
+			.rows.career li {
+				grid-template-columns: 160px 150px minmax(0, 1fr);
+			}
+			.period {
+				font-size: 14px;
+				color: rgb(var(--gray));
+				font-variant-numeric: tabular-nums;
+			}
+			.summary {
+				font-size: 15px;
+				line-height: 1.7;
+				color: rgb(var(--gray-dark));
+			}
+			.stack span {
+				white-space: nowrap;
+			}
+			.stack {
+				font-size: 15px;
+				color: rgb(var(--gray-dark));
+			}
 			.section:last-child {
 				padding-bottom: 96px;
 			}
 			@media (max-width: 720px) {
-				.rows li {
+				.rows li,
+				.rows.career li {
 					grid-template-columns: minmax(0, 1fr) auto;
-					gap: 12px;
+					gap: 4px 12px;
+				}
+				.summary {
+					grid-column: 1 / -1;
 				}
 			}
 		</style>
@@ -75,13 +112,33 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 				<h2 class="section-label">하는 일</h2>
 				<div>
 					<p class="lead">
-						Spring·JPA로 백엔드 시스템을 설계하고 만듭니다. 운영하다 막힌 지점과 고친 방법을 글로 남기고, 직접
-						쓰려고 작은 앱과 도구를 만듭니다.
+						10년차 백엔드 개발자다. 지금은 메디컬테크 회사에서 치과와 기공소를 잇는 B2B 플랫폼의 개발 리드를 맡고
+						있다. 인가 체계, 스키마 관리, 동시성 제어처럼 한 번 잘못되면 되돌리기 어려운 영역을 주로 다룬다.
 					</p>
-					<p class="lead">
-						이 블로그는 Tistory에서 운영하던 글을 직접 관리할 수 있는 형태로 옮겨 온 곳입니다.
-					</p>
+					<p class="lead">운영하다 막힌 지점과 고친 방법을 이 블로그에 적는다.</p>
 				</div>
+			</section>
+
+			<section class="section">
+				<h2 class="section-label">경력</h2>
+				<ul class="rows career">
+					{
+						career.map((c) => (
+							<li>
+								<span class="name">{c.company}</span>
+								<span class="period">{c.period}</span>
+								<span class="summary">{c.summary}</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section class="section">
+				<h2 class="section-label">기술</h2>
+				<p class="lead stack">
+					{stack.map((t, i) => <span>{i > 0 && ' · '}{t}</span>)}
+				</p>
 			</section>
 
 			{
