@@ -4,13 +4,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
 
-// 카테고리·프로젝트 목록은 각 페이지에 있으므로 여기선 하는 일·기술·연락만 둡니다.
-// 기술은 블로그 주제와 프로젝트(src/content/projects)에 실제로 쓴 것만, 영역별로 짧게 둡니다.
-const stack = [
-	{ area: '백엔드', items: ['Java', 'Kotlin', 'Spring Boot', 'JPA', 'MySQL', 'PostgreSQL', 'Redis', 'AWS'] },
-	{ area: '웹', items: ['TypeScript', 'Vite', 'Chrome Extension'] },
-	{ area: '앱', items: ['Flutter', 'Swift', 'SwiftUI', 'Supabase'] },
-];
+// 카테고리·프로젝트 목록은 각 페이지에 있으므로 여기선 하는 일·연락만 둡니다.
 const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 	const isMail = l.href.startsWith('mailto:');
 	return { ...l, isMail, label: l.href.replace(/^(https?:\/\/|mailto:)/, '') };
@@ -22,6 +16,13 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 	<head>
 		<BaseHead title={`소개 · ${SITE_TITLE}`} description="zzaisang과 이 블로그에 대한 소개입니다." />
 		<style>
+			/* 내용이 짧아 푸터가 화면 중간에 뜨지 않도록, 헤더·푸터 높이(약 200px)를 뺀 화면 높이만큼 본문을 늘립니다. */
+			main {
+				min-height: calc(100svh - 200px);
+			}
+			.nowrap {
+				white-space: nowrap;
+			}
 			.lead {
 				margin: 0;
 				padding-top: 14px;
@@ -54,13 +55,6 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 			.rows a:hover {
 				color: rgb(var(--black));
 			}
-			.stack span {
-				white-space: nowrap;
-			}
-			.stack {
-				font-size: 15px;
-				color: rgb(var(--gray-dark));
-			}
 			.section:last-child {
 				padding-bottom: 96px;
 			}
@@ -68,10 +62,6 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 				.rows li {
 					grid-template-columns: minmax(0, 1fr) auto;
 					gap: 4px 12px;
-				}
-				/* 기술 행은 짧은 영역 라벨 + 줄바꿈되는 목록이라 라벨 열을 고정 폭으로 둡니다. */
-				.rows.stack-rows li {
-					grid-template-columns: 56px minmax(0, 1fr);
 				}
 			}
 		</style>
@@ -88,34 +78,10 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
 				<h2 class="section-label">하는 일</h2>
 				<div>
 					<p class="lead">
-						백엔드를 기반으로 풀스택 개발을 합니다. Spring으로 서버와 데이터를 다루고, 필요한 웹·앱 화면까지 직접
+						백엔드를 기반으로 풀스택 개발을 합니다. Spring으로 서버와 데이터를 다루고, 필요한 <span class="nowrap">웹·앱</span> 화면까지 직접
 						만듭니다.
 					</p>
 				</div>
-			</section>
-
-			<section class="section">
-				<h2 class="section-label">기술</h2>
-				<ul class="rows stack-rows">
-					{
-						stack.map((g) => (
-							<li>
-								<span class="name">{g.area}</span>
-								<span class="stack">
-									{g.items.map((t, i) =>
-										i < g.items.length - 1 ? (
-											<>
-												<span>{t} ·</span>{' '}
-											</>
-										) : (
-											<span>{t}</span>
-										),
-									)}
-								</span>
-							</li>
-						))
-					}
-				</ul>
 			</section>
 
 			{
