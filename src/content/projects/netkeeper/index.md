@@ -1,6 +1,6 @@
 ---
 title: "NetKeeper"
-summary: "인터넷이 끊기면 다음 Wi-Fi 나 iPhone 핫스팟으로 자동 전환하는 macOS 메뉴바 앱. 연결 여부가 아니라 실제 인터넷이 되는지를 확인한다."
+summary: "인터넷이 끊기면 다음 Wi-Fi 나 iPhone 핫스팟으로 자동 전환하는 macOS 메뉴바 앱입니다. 연결 여부가 아니라 실제 인터넷이 되는지를 확인합니다."
 role: "1인 개발"
 pubDate: "2026-11-24T00:00:00+09:00"
 techStack: ["Swift", "SwiftUI", "CoreWLAN", "Accessibility API", "Keychain"]

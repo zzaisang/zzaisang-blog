@@ -1,6 +1,6 @@
 ---
 title: "현소"
-summary: "가족이 함께 쓰는 소비 관리 iOS 앱. 가계부·고정비·구매 검토를 한곳에 모으고, 사진이나 공유 시트로 넣은 내역을 AI가 초안으로 정리한다."
+summary: "가족이 함께 쓰는 소비 관리 iOS 앱입니다. 가계부·고정비·구매 검토를 한곳에 모으고, 사진이나 공유 시트로 넣은 내역을 AI가 초안으로 정리합니다."
 role: "1인 개발 (기획·앱·백엔드·운영)"
 pubDate: "2026-04-17T00:00:00+09:00"
 techStack: ["Flutter", "Riverpod", "go_router", "Supabase", "PostgreSQL", "Edge Functions", "FCM", "Cloudflare R2"]

@@ -1,6 +1,6 @@
 ---
 title: "RoutineTabs"
-summary: "매일 여는 탭 세트를 요일·시간에 맞춰 자동으로 열어주는 Chrome 확장(MV3). 서머타임에도 시간이 밀리지 않고, 끄면 확실히 멈추는 데 집중했다."
+summary: "매일 여는 탭 세트를 요일·시간에 맞춰 자동으로 열어주는 Chrome 확장(MV3)입니다. 서머타임에도 시간이 밀리지 않고, 끄면 확실히 멈추는 데 집중했습니다."
 role: "1인 개발"
 pubDate: "2026-06-08T00:00:00+09:00"
 techStack: ["TypeScript", "Chrome Extension MV3", "Vite", "CRXJS", "Vitest"]
