@@ -21,6 +21,8 @@ export const GOOGLE_SITE_VERIFICATION =
 	import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'FHdTysnAkP5A8FtQK9382HCnPty8Z5kkyJ7G_As_jSI';
 // AdSense 계정 인증 메타(google-adsense-account). 광고 로더와 무관하게 전 페이지 head 에 들어갑니다.
 export const GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-8697100272441762';
+// Google Analytics 4 측정 ID. 공개 값이라 고정하며, 로컬 dev 에서는 싣지 않습니다.
+export const GA_MEASUREMENT_ID = 'G-EG2P2DBS18';
 export const NAVER_SITE_VERIFICATION = import.meta.env.PUBLIC_NAVER_SITE_VERIFICATION ?? '';
 
 // 소셜 링크 — href 가 비어 있으면 자동으로 숨겨집니다. 푸터·소개 연락에 함께 쓰입니다.
