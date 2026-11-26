@@ -21,7 +21,16 @@ export default defineConfig({
 			provider: fontProviders.local(),
 			name: 'Atkinson',
 			cssVariable: '--font-atkinson',
-			fallbacks: ['sans-serif'],
+			// Atkinson 에는 한글 글리프가 없어 한글은 폴백 폰트로 그려집니다.
+			// OS별 한글 시스템 폰트를 명시해 환경마다 들쭉날쭉한 기본 고딕을 막습니다.
+			fallbacks: [
+				'-apple-system',
+				'BlinkMacSystemFont',
+				'Apple SD Gothic Neo',
+				'Malgun Gothic',
+				'Noto Sans KR',
+				'sans-serif',
+			],
 			options: {
 				variants: [
 					{
