@@ -12,7 +12,7 @@ const links = SOCIAL_LINKS.filter((l) => l.href);
 		<nav aria-label="바깥 링크">
 			{
 				links.map((l) => (
-					<a href={l.href} target="_blank" rel="noopener noreferrer">
+					<a href={l.href} {...(l.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noopener noreferrer' })}>
 						{l.name}
 					</a>
 				))

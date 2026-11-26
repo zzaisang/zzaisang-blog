@@ -19,8 +19,10 @@ export const ADSENSE_SLOT_ARTICLE = import.meta.env.PUBLIC_ADSENSE_SLOT_ARTICLE 
 export const GOOGLE_SITE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '';
 export const NAVER_SITE_VERIFICATION = import.meta.env.PUBLIC_NAVER_SITE_VERIFICATION ?? '';
 
-// 소셜 링크 — href 가 비어 있으면 자동으로 숨겨집니다. (지원 아이콘: github·linkedin·email·x)
+// 소셜 링크 — href 가 비어 있으면 자동으로 숨겨집니다. 푸터·소개 연락에 함께 쓰입니다.
+// mailto: 링크는 새 탭으로 열지 않고, Person JSON-LD 의 sameAs(프로필 URL)에서도 빠집니다.
 export const SOCIAL_LINKS = [
 	{ name: 'GitHub', icon: 'github', href: 'https://github.com/zzaisang' },
+	{ name: 'Email', icon: 'email', href: 'mailto:dev.zzaisang@gmail.com' },
 	{ name: 'LinkedIn', icon: 'linkedin', href: '' }, // TODO: LinkedIn 프로필 URL 입력 시 자동 표시됩니다
 ];

@@ -19,7 +19,7 @@ const recentPosts = (await getCollection('blog'))
 const github = SOCIAL_LINKS.find((l) => l.icon === 'github' && l.href);
 
 // Person JSON-LD — 구글이 사이트 주인을 하나의 '엔티티'로 인식하게 합니다.
-const sameAs = SOCIAL_LINKS.filter((l) => l.href).map((l) => l.href);
+const sameAs = SOCIAL_LINKS.filter((l) => l.href && !l.href.startsWith('mailto:')).map((l) => l.href);
 const personJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'Person',
