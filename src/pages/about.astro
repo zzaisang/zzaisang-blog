@@ -1,23 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import ProjectList from '../components/ProjectList.astro';
 import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
-import { CATEGORY_DESCRIPTIONS, categoryToSlug, sortCategories } from '../utils/categories';
-import { sortProjects } from '../utils/projects';
-import { withBase } from '../utils/url';
 
-const posts = await getCollection('blog');
-const counts = new Map<string, number>();
-for (const post of posts) {
-	const cat = post.data.category;
-	if (cat) counts.set(cat, (counts.get(cat) ?? 0) + 1);
-}
-const categories = sortCategories([...counts.keys()]);
-const projects = sortProjects(await getCollection('projects'));
-const contacts = SOCIAL_LINKS.filter((l) => l.href);
+// 카테고리·프로젝트 목록은 각 페이지에 있으므로 여기선 하는 일과 연락만 둡니다.
+const contacts = SOCIAL_LINKS.filter((l) => l.href).map((l) => {
+	const isMail = l.href.startsWith('mailto:');
+	return { ...l, isMail, label: l.href.replace(/^(https?:\/\/|mailto:)/, '') };
+});
 ---
 
 <!doctype html>
@@ -45,43 +36,29 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href);
 			}
 			.rows li {
 				display: grid;
-				grid-template-columns: 160px minmax(0, 1fr) 72px;
+				grid-template-columns: 160px minmax(0, 1fr);
 				gap: 24px;
 				padding: 14px 0;
 				border-top: 1px solid rgb(var(--gray-light));
 				align-items: baseline;
 			}
-			.rows.two li {
-				grid-template-columns: 160px minmax(0, 1fr);
-			}
 			.name {
 				font-weight: 500;
 			}
-			.desc,
-			.count {
-				font-size: 14px;
-				color: rgb(var(--gray));
-			}
-			.count {
-				text-align: right;
-				font-variant-numeric: tabular-nums;
-			}
-			.rows a.ext {
+			.rows a {
 				color: var(--accent);
 				font-size: 15px;
+			}
+			.rows a:hover {
+				color: rgb(var(--black));
 			}
 			.section:last-child {
 				padding-bottom: 96px;
 			}
 			@media (max-width: 720px) {
-				.rows li,
-				.rows.two li {
+				.rows li {
 					grid-template-columns: minmax(0, 1fr) auto;
-					gap: 4px 12px;
-				}
-				.desc {
-					grid-column: 1 / -1;
-					grid-row: 2;
+					gap: 12px;
 				}
 			}
 		</style>
@@ -108,53 +85,18 @@ const contacts = SOCIAL_LINKS.filter((l) => l.href);
 			</section>
 
 			{
-				categories.length > 0 && (
-					<section class="section">
-						<div class="section-aside">
-							<h2 class="section-label">다루는 것</h2>
-							<a class="more" href={withBase('/categories')}>
-								카테고리 전체
-							</a>
-						</div>
-						<ul class="rows">
-							{categories.map((cat) => (
-								<li>
-									<a class="name" href={withBase(`/categories/${categoryToSlug(cat)}/`)}>
-										{cat}
-									</a>
-									<span class="desc">{CATEGORY_DESCRIPTIONS[cat]}</span>
-									<span class="count">{counts.get(cat)}개</span>
-								</li>
-							))}
-						</ul>
-					</section>
-				)
-			}
-
-			{
-				projects.length > 0 && (
-					<section class="section">
-						<div class="section-aside">
-							<h2 class="section-label">만든 것</h2>
-							<a class="more" href={withBase('/projects')}>
-								프로젝트 전체
-							</a>
-						</div>
-						<ProjectList projects={projects} />
-					</section>
-				)
-			}
-
-			{
 				contacts.length > 0 && (
 					<section class="section">
 						<h2 class="section-label">연락</h2>
-						<ul class="rows two">
-							{contacts.map((link) => (
+						<ul class="rows">
+							{contacts.map((c) => (
 								<li>
-									<span class="name">{link.name}</span>
-									<a class="ext" href={link.href} target="_blank" rel="noopener noreferrer">
-										{link.href.replace(/^https?:\/\//, '')}
+									<span class="name">{c.name}</span>
+									<a
+										href={c.href}
+										{...(c.isMail ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+									>
+										{c.label}
 									</a>
 								</li>
 							))}
