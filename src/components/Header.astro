@@ -22,7 +22,7 @@ import { withBase } from '../utils/url';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: white;
+		background: rgb(var(--bg));
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 	}
 	h2 {
@@ -41,12 +41,35 @@ import { withBase } from '../utils/url';
 	}
 	nav a {
 		padding: 1em 0.5em;
-		color: var(--black);
+		color: rgb(var(--black));
 		border-bottom: 4px solid transparent;
 		text-decoration: none;
 	}
 	nav a.active {
 		text-decoration: none;
 		border-bottom-color: var(--accent);
+	}
+	/* 모바일: 사이트명은 첫 줄, 메뉴는 둘째 줄 한 줄로. 폭이 모자라면 가로 스크롤. */
+	@media (max-width: 720px) {
+		nav {
+			flex-wrap: wrap;
+		}
+		h2 {
+			width: 100%;
+		}
+		h2 a {
+			display: block;
+			padding: 0.8em 0.5em 0.2em;
+		}
+		.internal-links {
+			display: flex;
+			width: 100%;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+		nav .internal-links a {
+			padding: 0.6em 0.4em;
+			font-size: 0.9em;
+		}
 	}
 </style>
