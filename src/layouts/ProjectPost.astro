@@ -1,5 +1,6 @@
 ---
 import { Image } from 'astro:assets';
+import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
@@ -10,7 +11,10 @@ import { PROJECT_STATUS_LABELS, PROJECT_TYPE_LABELS } from '../utils/projects';
 import { withBase } from '../utils/url';
 
 // 포트폴리오 상세 전용 레이아웃. BlogPost 와 달리 광고(AdSense)·BlogPosting JSON-LD 를 넣지 않습니다.
-type Props = CollectionEntry<'projects'>['data'];
+type Props = CollectionEntry<'projects'>['data'] & {
+	/** render() 가 돌려준 헤딩. h2 만 왼쪽 목차로 씁니다. */
+	headings?: MarkdownHeading[];
+};
 
 const {
 	title,
@@ -27,7 +31,9 @@ const {
 	writeupSlug,
 	confidential,
 	heroImage,
+	headings = [],
 } = Astro.props;
+const toc = headings.filter((h) => h.depth === 2);
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
@@ -52,6 +58,7 @@ const jsonLd = {
 		<BaseHead title={title} description={summary} image={heroImage} />
 		<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
 		<style>
+			/* 글 상세와 같은 2열 틀: 왼쪽 200px sticky 메타·목차, 오른쪽 본문. */
 			.post {
 				display: grid;
 				grid-template-columns: 200px minmax(0, var(--content-width));
@@ -60,49 +67,71 @@ const jsonLd = {
 				padding-bottom: 96px;
 			}
 			.side {
+				font-size: 14px;
+				line-height: 1.6;
+			}
+			.sticky {
+				position: sticky;
+				top: 24px;
 				display: flex;
 				flex-direction: column;
 				gap: 20px;
-				font-size: 14px;
-				line-height: 1.6;
-				color: rgb(var(--gray));
 			}
-			.side dl {
+			.meta {
 				display: flex;
 				flex-direction: column;
 				gap: 2px;
-				margin: 0;
-			}
-			.side dd {
-				margin: 0;
-			}
-			.side a {
 				color: rgb(var(--gray));
 			}
-			.side a:hover {
+			.meta a,
+			.toc a {
+				color: rgb(var(--gray));
+			}
+			.meta a:hover,
+			.toc a:hover {
 				color: var(--accent);
 			}
-			.stack,
-			.links {
+			.toc {
 				display: flex;
 				flex-direction: column;
-				gap: 4px;
-				margin: 0;
-				padding: 16px 0 0;
-				list-style: none;
+				gap: 8px;
 				border-top: 1px solid rgb(var(--gray-light));
-			}
-			.links a {
-				color: var(--accent);
+				padding-top: 16px;
 			}
 			.post-title {
 				margin: 0;
 			}
 			.lede {
-				margin: 16px 0 40px;
+				margin: 16px 0 32px;
 				font-size: 18px;
 				line-height: 1.7;
 				color: rgb(var(--gray));
+			}
+			/* 핵심 정보 표: 시안 A-Post 의 dl 과 같은 hairline 2열. */
+			.facts {
+				display: grid;
+				grid-template-columns: auto minmax(0, 1fr);
+				gap: 6px 20px;
+				margin: 0 0 40px;
+				padding: 16px 0;
+				border-top: 1px solid rgb(var(--gray-light));
+				border-bottom: 1px solid rgb(var(--gray-light));
+				font-size: 15px;
+				line-height: 1.7;
+			}
+			.facts dt {
+				color: rgb(var(--gray));
+			}
+			.facts dd {
+				margin: 0;
+			}
+			.facts .links {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 4px 16px;
+			}
+			.facts a {
+				color: var(--accent);
 			}
 			.hero {
 				display: block;
@@ -124,7 +153,7 @@ const jsonLd = {
 					padding-top: 24px;
 				}
 				.side {
-					order: 2;
+					display: none;
 				}
 			}
 		</style>
@@ -134,69 +163,71 @@ const jsonLd = {
 		<Header />
 		<main class="wrap post">
 			<aside class="side">
-				<dl>
-					<dt class="sr-only">구분</dt>
-					<dd>
-						{PROJECT_TYPE_LABELS[projectType] ?? projectType} · {PROJECT_STATUS_LABELS[status] ?? status}
-					</dd>
-					<dt class="sr-only">시작</dt>
-					<dd><FormattedDate date={pubDate} /></dd>
+				<div class="sticky">
+					<div class="meta">
+						<a href={withBase('/projects')}>← 프로젝트</a>
+					</div>
 					{
-						updatedDate && (
-							<>
-								<dt class="sr-only">수정</dt>
-								<dd>
-									<FormattedDate date={updatedDate} /> 수정
-								</dd>
-							</>
+						toc.length > 0 && (
+							<nav class="toc" aria-label="목차">
+								{toc.map((h) => (
+									<a href={`#${h.slug}`}>{h.text}</a>
+								))}
+							</nav>
 						)
 					}
-					{
-						(role || teamSize) && (
-							<>
-								<dt class="sr-only">역할</dt>
-								<dd>{[role, teamSize].filter(Boolean).join(' · ')}</dd>
-							</>
-						)
-					}
-				</dl>
-				{
-					techStack.length > 0 && (
-						<ul class="stack" aria-label="기술 스택">
-							{techStack.map((t) => (
-								<li>{t}</li>
-							))}
-						</ul>
-					)
-				}
-				<ul class="links" aria-label="링크">
-					{
-						!confidential && repoUrl && (
-							<li>
-								<a href={repoUrl} target="_blank" rel="noopener noreferrer">
-									코드 ↗
-								</a>
-							</li>
-						)
-					}
-					{
-						demoUrl && (
-							<li>
-								<a href={demoUrl} target="_blank" rel="noopener noreferrer">
-									데모 ↗
-								</a>
-							</li>
-						)
-					}
-					{confidential && <li>소스 비공개 · 요청 시 공유</li>}
-					<li>
-						<a href={withBase('/projects')}>← 프로젝트 목록</a>
-					</li>
-				</ul>
+				</div>
 			</aside>
 			<article>
 				<h1 class="post-title">{title}</h1>
 				<p class="lede">{summary}</p>
+				<dl class="facts">
+					<dt>상태</dt>
+					<dd>
+						{PROJECT_TYPE_LABELS[projectType] ?? projectType} · {PROJECT_STATUS_LABELS[status] ?? status}
+					</dd>
+					<dt>시작</dt>
+					<dd>
+						<FormattedDate date={pubDate} />
+						{updatedDate && <span> · <FormattedDate date={updatedDate} /> 수정</span>}
+					</dd>
+					{
+						(role || teamSize) && (
+							<>
+								<dt>역할</dt>
+								<dd>{[role, teamSize].filter(Boolean).join(' · ')}</dd>
+							</>
+						)
+					}
+					{
+						techStack.length > 0 && (
+							<>
+								<dt>스택</dt>
+								<dd>{techStack.join(' · ')}</dd>
+							</>
+						)
+					}
+					{
+						(repoUrl || demoUrl || confidential) && (
+							<>
+								<dt>링크</dt>
+								<dd class="links">
+									{!confidential && repoUrl && (
+										<a href={repoUrl} target="_blank" rel="noopener noreferrer">
+											코드 ↗
+										</a>
+									)}
+									{demoUrl && (
+										<a href={demoUrl} target="_blank" rel="noopener noreferrer">
+											데모 ↗
+										</a>
+									)}
+									{confidential && <span>소스 비공개 · 요청 시 공유</span>}
+								</dd>
+							</>
+						)
+					}
+				</dl>
 				{heroImage && <Image class="hero" width={1020} height={510} src={heroImage} alt="" />}
 				<div class="prose">
 					<slot />
