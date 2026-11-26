@@ -223,19 +223,34 @@ hr {
 	font-size: 14px;
 	color: rgb(var(--gray));
 }
-/* 프로젝트 3열 그리드(홈 "만든 것"·/projects). */
-.proj-grid {
+/* 홈·소개·프로젝트 목록의 섹션: 글 목록의 연도 그룹과 같은 "왼쪽 200px 라벨 | 오른쪽 내용" 리듬. */
+.section {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-columns: 200px minmax(0, 1fr);
 	gap: 40px;
-	list-style: none;
+	padding-bottom: 64px;
+}
+.section-label {
 	margin: 0;
-	padding: 0;
+	padding-top: 14px;
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.6;
+}
+.section-aside .more {
+	display: block;
+	margin-top: 4px;
+	font-size: 14px;
+	color: var(--accent);
 }
 @media (max-width: 720px) {
-	.proj-grid {
+	.section {
 		grid-template-columns: minmax(0, 1fr);
-		gap: 24px;
+		gap: 8px;
+		padding-bottom: 48px;
+	}
+	.section-label {
+		padding-top: 0;
 	}
 }
 

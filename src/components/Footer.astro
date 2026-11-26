@@ -1,26 +1,45 @@
 ---
-import { SITE_TITLE } from '../consts';
+import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
 import { withBase } from '../utils/url';
 
 const today = new Date();
+const links = SOCIAL_LINKS.filter((l) => l.href);
 ---
 
 <footer class="wrap">
-	<span>&copy; {today.getFullYear()} {SITE_TITLE}</span>
-	<a href={withBase('/rss.xml')}>RSS</a>
+	<div class="inner">
+		<span>&copy; {today.getFullYear()} {SITE_TITLE}</span>
+		<nav aria-label="바깥 링크">
+			{
+				links.map((l) => (
+					<a href={l.href} target="_blank" rel="noopener noreferrer">
+						{l.name}
+					</a>
+				))
+			}
+			<a href={withBase('/rss.xml')}>RSS</a>
+		</nav>
+	</div>
 </footer>
 <style>
-	footer {
+	.inner {
 		display: flex;
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 8px;
-		padding-top: 32px;
-		padding-bottom: 40px;
+		padding: 24px 0 40px;
+		border-top: 1px solid rgb(var(--gray-light));
 		font-size: 13px;
 		color: rgb(var(--gray));
 	}
+	nav {
+		display: flex;
+		gap: 16px;
+	}
 	a {
 		color: rgb(var(--gray));
+	}
+	a:hover {
+		color: var(--accent);
 	}
 </style>
