@@ -16,7 +16,11 @@ export const POSTS_PER_PAGE = 10;
 // 수익화 / 검색엔진 인증 — .env 의 PUBLIC_* 값으로 주입됩니다(값이 없으면 자동 비활성화).
 export const ADSENSE_CLIENT = import.meta.env.PUBLIC_ADSENSE_CLIENT ?? '';
 export const ADSENSE_SLOT_ARTICLE = import.meta.env.PUBLIC_ADSENSE_SLOT_ARTICLE ?? '';
-export const GOOGLE_SITE_VERIFICATION = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION ?? '';
+// Google 인증 값은 공개 값이라 기본값을 고정합니다(env 가 있으면 그 값이 우선).
+export const GOOGLE_SITE_VERIFICATION =
+	import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION || 'FHdTysnAkP5A8FtQK9382HCnPty8Z5kkyJ7G_As_jSI';
+// AdSense 계정 인증 메타(google-adsense-account). 광고 로더와 무관하게 전 페이지 head 에 들어갑니다.
+export const GOOGLE_ADSENSE_ACCOUNT = 'ca-pub-8697100272441762';
 export const NAVER_SITE_VERIFICATION = import.meta.env.PUBLIC_NAVER_SITE_VERIFICATION ?? '';
 
 // 소셜 링크 — href 가 비어 있으면 자동으로 숨겨집니다. 푸터·소개 연락에 함께 쓰입니다.
