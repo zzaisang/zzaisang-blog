@@ -10,7 +10,6 @@ import {
 	NAVER_SITE_VERIFICATION,
 	SITE_TITLE,
 } from '../consts';
-import { Font } from 'astro:assets';
 import { withBase } from '../utils/url';
 
 interface Props {
@@ -52,8 +51,6 @@ const { title, description, image = FallbackImage } = Astro.props;
 		/>
 	)
 }
-
-<Font cssVariable="--font-atkinson" preload />
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
