@@ -12,12 +12,15 @@ interface Props {
 	describeFirst?: boolean;
 	/** 카테고리 열 표시(카테고리 상세에선 모두 같은 값이라 끕니다). */
 	showCategory?: boolean;
+	/** 주면 연도로 나누지 않고 이 라벨 한 묶음으로 보여 줍니다(홈 "최근 글"). 라벨 아래엔 aside 슬롯이 붙습니다. */
+	heading?: string;
 }
 
-const { posts, describeFirst = false, showCategory = true } = Astro.props;
+const { posts, describeFirst = false, showCategory = true, heading } = Astro.props;
 
 const groups: { year: number; posts: CollectionEntry<'blog'>[] }[] = [];
-for (const post of posts) {
+if (heading) groups.push({ year: 0, posts });
+else for (const post of posts) {
 	const year = post.data.pubDate.getUTCFullYear();
 	const last = groups.at(-1);
 	if (last?.year === year) last.posts.push(post);
@@ -29,7 +32,14 @@ const first = posts[0];
 {
 	groups.map((group, i) => (
 		<section class="year-group">
-			<h2 class="year">{group.year}</h2>
+			{heading ? (
+				<div class="section-aside">
+					<h2 class="section-label">{heading}</h2>
+					<slot name="aside" />
+				</div>
+			) : (
+				<h2 class="year">{group.year}</h2>
+			)}
 			<div>
 				<ol class:list={['rows', { 'no-cat': !showCategory }]}>
 					{group.posts.map((post) => (

@@ -1,0 +1,86 @@
+---
+// 프로젝트 행 목록(홈 "만든 것"·/projects 공용). 글 목록 행과 같은 hairline 리듬:
+// "제목 | 요약 + 스택 | 상태" 3열, 모바일은 제목·요약 2줄.
+import type { CollectionEntry } from 'astro:content';
+import { PROJECT_STATUS_LABELS } from '../utils/projects';
+import { withBase } from '../utils/url';
+
+interface Props {
+	projects: CollectionEntry<'projects'>[];
+	headingLevel?: 2 | 3;
+	/** 행 오른쪽 상태 열 표시(상태별로 묶인 목록에선 끕니다). */
+	showStatus?: boolean;
+}
+
+const { projects, headingLevel = 3, showStatus = true } = Astro.props;
+const TitleTag = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<ul class:list={['rows', { 'no-status': !showStatus }]}>
+	{
+		projects.map(({ id, data }) => (
+			<li>
+				<TitleTag class="title">
+					<a href={withBase(`/projects/${id}/`)}>{data.title}</a>
+				</TitleTag>
+				<div class="body">
+					<p class="summary">{data.summary}</p>
+					{data.techStack.length > 0 && <p class="stack">{data.techStack.join(' · ')}</p>}
+				</div>
+				{showStatus && <span class="status">{PROJECT_STATUS_LABELS[data.status] ?? data.status}</span>}
+			</li>
+		))
+	}
+</ul>
+
+<style>
+	.rows {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	.rows li {
+		display: grid;
+		grid-template-columns: 160px minmax(0, 1fr) 72px;
+		gap: 24px;
+		padding: 16px 0;
+		border-top: 1px solid rgb(var(--gray-light));
+		align-items: baseline;
+	}
+	.rows.no-status li {
+		grid-template-columns: 160px minmax(0, 1fr);
+	}
+	.title {
+		margin: 0;
+		font-size: 17px;
+		font-weight: 500;
+		line-height: 1.6;
+	}
+	.summary {
+		margin: 0;
+		font-size: 15px;
+		line-height: 1.7;
+		color: rgb(var(--gray-dark));
+	}
+	.stack {
+		margin: 6px 0 0;
+		font-size: 13px;
+		color: rgb(var(--gray));
+	}
+	.status {
+		font-size: 14px;
+		color: rgb(var(--gray));
+		text-align: right;
+	}
+	@media (max-width: 720px) {
+		.rows li,
+		.rows.no-status li {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 4px;
+		}
+		.status {
+			display: none;
+		}
+	}
+</style>
