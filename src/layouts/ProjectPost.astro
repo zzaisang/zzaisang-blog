@@ -4,10 +4,8 @@ import type { MarkdownHeading } from 'astro';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_AUTHOR } from '../consts';
-import { PROJECT_STATUS_LABELS, PROJECT_TYPE_LABELS } from '../utils/projects';
 import { withBase } from '../utils/url';
 
 // 포트폴리오 상세 전용 레이아웃. BlogPost 와 달리 광고(AdSense)·BlogPosting JSON-LD 를 넣지 않습니다.
@@ -19,13 +17,9 @@ type Props = CollectionEntry<'projects'>['data'] & {
 const {
 	title,
 	summary,
-	role,
 	pubDate,
 	updatedDate,
 	techStack,
-	projectType,
-	status,
-	teamSize,
 	repoUrl,
 	demoUrl,
 	writeupSlug,
@@ -107,32 +101,6 @@ const jsonLd = {
 				line-height: 1.7;
 				color: rgb(var(--gray));
 			}
-			/* 핵심 정보 표: 시안 A-Post 의 dl 과 같은 hairline 2열. */
-			.facts {
-				display: grid;
-				grid-template-columns: auto minmax(0, 1fr);
-				gap: 6px 20px;
-				margin: 0 0 40px;
-				padding: 16px 0;
-				border-top: 1px solid rgb(var(--gray-light));
-				border-bottom: 1px solid rgb(var(--gray-light));
-				font-size: 15px;
-				line-height: 1.7;
-			}
-			.facts dt {
-				color: rgb(var(--gray));
-			}
-			.facts dd {
-				margin: 0;
-			}
-			.facts .links {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 4px 16px;
-			}
-			.facts a {
-				color: var(--accent);
-			}
 			.hero {
 				display: block;
 				margin-bottom: 40px;
@@ -181,53 +149,6 @@ const jsonLd = {
 			<article>
 				<h1 class="post-title">{title}</h1>
 				<p class="lede">{summary}</p>
-				<dl class="facts">
-					<dt>상태</dt>
-					<dd>
-						{PROJECT_TYPE_LABELS[projectType] ?? projectType} · {PROJECT_STATUS_LABELS[status] ?? status}
-					</dd>
-					<dt>시작</dt>
-					<dd>
-						<FormattedDate date={pubDate} />
-						{updatedDate && <span> · <FormattedDate date={updatedDate} /> 수정</span>}
-					</dd>
-					{
-						(role || teamSize) && (
-							<>
-								<dt>역할</dt>
-								<dd>{[role, teamSize].filter(Boolean).join(' · ')}</dd>
-							</>
-						)
-					}
-					{
-						techStack.length > 0 && (
-							<>
-								<dt>스택</dt>
-								<dd>{techStack.join(' · ')}</dd>
-							</>
-						)
-					}
-					{
-						(repoUrl || demoUrl || confidential) && (
-							<>
-								<dt>링크</dt>
-								<dd class="links">
-									{!confidential && repoUrl && (
-										<a href={repoUrl} target="_blank" rel="noopener noreferrer">
-											코드 ↗
-										</a>
-									)}
-									{demoUrl && (
-										<a href={demoUrl} target="_blank" rel="noopener noreferrer">
-											데모 ↗
-										</a>
-									)}
-									{confidential && <span>소스 비공개 · 요청 시 공유</span>}
-								</dd>
-							</>
-						)
-					}
-				</dl>
 				{heroImage && <Image class="hero" width={1020} height={510} src={heroImage} alt="" />}
 				<div class="prose">
 					<slot />
