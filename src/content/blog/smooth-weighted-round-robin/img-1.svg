@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 330" font-family="'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+  <style>
+    /* 회차 1~7이 차례로 나타난다. 빨간 점선 = 뽑힌 서버에서 total(7)만큼 깎이는 구간 */
+    .s1, .s2, .s3, .s4, .s5, .s6, .s7 { animation: 10s ease-out infinite; }
+    .s1 { animation-name: s1; }
+    @keyframes s1 { 0% { opacity: 0; } 4% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s2 { animation-name: s2; }
+    @keyframes s2 { 0%, 10% { opacity: 0; } 14% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s3 { animation-name: s3; }
+    @keyframes s3 { 0%, 20% { opacity: 0; } 24% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s4 { animation-name: s4; }
+    @keyframes s4 { 0%, 30% { opacity: 0; } 34% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s5 { animation-name: s5; }
+    @keyframes s5 { 0%, 40% { opacity: 0; } 44% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s6 { animation-name: s6; }
+    @keyframes s6 { 0%, 50% { opacity: 0; } 54% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .s7 { animation-name: s7; }
+    @keyframes s7 { 0%, 60% { opacity: 0; } 64% { opacity: 1; } 88% { opacity: 1; } 95%, 100% { opacity: 0; } }
+    .cut { animation: blink 1.2s ease-in-out infinite; }
+    @keyframes blink { 50% { fill-opacity: 0.15; } }
+    @media (prefers-reduced-motion: reduce) { .s1, .s2, .s3, .s4, .s5, .s6, .s7, .cut { animation: none; } }
+  </style>
+  <rect width="800" height="330" fill="#fff"/>
+  <text x="400" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#222939">가중치 A=5, B=1, C=1 · 회차마다 더한 뒤의 current</text>
+  <g font-size="12" fill="#60739f"><rect x="210" y="44" width="12" height="12" fill="#2337ff"/><text x="228" y="55">뽑힌 서버</text><rect x="310" y="44" width="12" height="12" fill="#b4bfd9"/><text x="328" y="55">나머지</text><rect x="400" y="44" width="12" height="12" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/><text x="418" y="55">total(7)만큼 깎임 → 다음 회차 시작값</text></g>
+  <line x1="70" y1="180" x2="790" y2="180" stroke="#e5e9f0" stroke-width="2"/>
+  <text x="60" y="184" text-anchor="end" font-size="12" fill="#60739f">0</text>
+  <g class="s1">
+    <rect x="97" y="120" width="18" height="60" fill="#2337ff"/>
+    <text x="106" y="115" text-anchor="middle" font-size="11" fill="#222939">5</text>
+    <text x="106" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">A</text>
+    <rect class="cut" x="95" y="120" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="93" y1="204" x2="119" y2="204" stroke="#d23f3f" stroke-width="2"/>
+    <text x="91" y="208" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">-2</text>
+    <rect x="121" y="168" width="18" height="12" fill="#b4bfd9"/>
+    <text x="130" y="163" text-anchor="middle" font-size="11" fill="#222939">1</text>
+    <text x="130" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="145" y="168" width="18" height="12" fill="#b4bfd9"/>
+    <text x="154" y="163" text-anchor="middle" font-size="11" fill="#222939">1</text>
+    <text x="154" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="130" y="292" text-anchor="middle" font-size="13" fill="#222939">1회차</text>
+    <text x="130" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ A</text>
+  </g>
+  <g class="s2">
+    <line x1="180" y1="72" x2="180" y2="310" stroke="#e5e9f0"/>
+    <rect x="197" y="144" width="18" height="36" fill="#2337ff"/>
+    <text x="206" y="139" text-anchor="middle" font-size="11" fill="#222939">3</text>
+    <text x="206" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">A</text>
+    <rect class="cut" x="195" y="144" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="193" y1="228" x2="219" y2="228" stroke="#d23f3f" stroke-width="2"/>
+    <text x="191" y="232" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">-4</text>
+    <rect x="221" y="156" width="18" height="24" fill="#b4bfd9"/>
+    <text x="230" y="151" text-anchor="middle" font-size="11" fill="#222939">2</text>
+    <text x="230" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="245" y="156" width="18" height="24" fill="#b4bfd9"/>
+    <text x="254" y="151" text-anchor="middle" font-size="11" fill="#222939">2</text>
+    <text x="254" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="230" y="292" text-anchor="middle" font-size="13" fill="#222939">2회차</text>
+    <text x="230" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ A</text>
+  </g>
+  <g class="s3">
+    <line x1="280" y1="72" x2="280" y2="310" stroke="#e5e9f0"/>
+    <rect x="297" y="168" width="18" height="12" fill="#b4bfd9"/>
+    <text x="306" y="163" text-anchor="middle" font-size="11" fill="#222939">1</text>
+    <text x="306" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">A</text>
+    <rect x="321" y="144" width="18" height="36" fill="#2337ff"/>
+    <text x="330" y="139" text-anchor="middle" font-size="11" fill="#222939">3</text>
+    <text x="330" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">B</text>
+    <rect class="cut" x="319" y="144" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="317" y1="228" x2="343" y2="228" stroke="#d23f3f" stroke-width="2"/>
+    <text x="315" y="232" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">-4</text>
+    <rect x="345" y="144" width="18" height="36" fill="#b4bfd9"/>
+    <text x="354" y="139" text-anchor="middle" font-size="11" fill="#222939">3</text>
+    <text x="354" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="330" y="292" text-anchor="middle" font-size="13" fill="#222939">3회차</text>
+    <text x="330" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ B</text>
+  </g>
+  <g class="s4">
+    <line x1="380" y1="72" x2="380" y2="310" stroke="#e5e9f0"/>
+    <rect x="397" y="108" width="18" height="72" fill="#2337ff"/>
+    <text x="406" y="103" text-anchor="middle" font-size="11" fill="#222939">6</text>
+    <text x="406" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">A</text>
+    <rect class="cut" x="395" y="108" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="393" y1="192" x2="419" y2="192" stroke="#d23f3f" stroke-width="2"/>
+    <text x="391" y="196" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">-1</text>
+    <rect x="421" y="180" width="18" height="36" fill="#b4bfd9"/>
+    <text x="430" y="229" text-anchor="middle" font-size="11" fill="#222939">-3</text>
+    <text x="430" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="445" y="132" width="18" height="48" fill="#b4bfd9"/>
+    <text x="454" y="127" text-anchor="middle" font-size="11" fill="#222939">4</text>
+    <text x="454" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="430" y="292" text-anchor="middle" font-size="13" fill="#222939">4회차</text>
+    <text x="430" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ A</text>
+  </g>
+  <g class="s5">
+    <line x1="480" y1="72" x2="480" y2="310" stroke="#e5e9f0"/>
+    <rect x="497" y="132" width="18" height="48" fill="#b4bfd9"/>
+    <text x="506" y="127" text-anchor="middle" font-size="11" fill="#222939">4</text>
+    <text x="506" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">A</text>
+    <rect x="521" y="180" width="18" height="24" fill="#b4bfd9"/>
+    <text x="530" y="217" text-anchor="middle" font-size="11" fill="#222939">-2</text>
+    <text x="530" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="545" y="120" width="18" height="60" fill="#2337ff"/>
+    <text x="554" y="115" text-anchor="middle" font-size="11" fill="#222939">5</text>
+    <text x="554" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">C</text>
+    <rect class="cut" x="543" y="120" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="541" y1="204" x2="567" y2="204" stroke="#d23f3f" stroke-width="2"/>
+    <text x="569" y="208" text-anchor="start" font-size="11" font-weight="700" fill="#d23f3f">-2</text>
+    <text x="530" y="292" text-anchor="middle" font-size="13" fill="#222939">5회차</text>
+    <text x="530" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ C</text>
+  </g>
+  <g class="s6">
+    <line x1="580" y1="72" x2="580" y2="310" stroke="#e5e9f0"/>
+    <rect x="597" y="72" width="18" height="108" fill="#2337ff"/>
+    <text x="606" y="67" text-anchor="middle" font-size="11" fill="#222939">9</text>
+    <text x="606" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">A</text>
+    <rect class="cut" x="595" y="72" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="593" y1="156" x2="619" y2="156" stroke="#d23f3f" stroke-width="2"/>
+    <text x="591" y="160" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">2</text>
+    <rect x="621" y="180" width="18" height="12" fill="#b4bfd9"/>
+    <text x="630" y="205" text-anchor="middle" font-size="11" fill="#222939">-1</text>
+    <text x="630" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="645" y="180" width="18" height="12" fill="#b4bfd9"/>
+    <text x="654" y="205" text-anchor="middle" font-size="11" fill="#222939">-1</text>
+    <text x="654" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="630" y="292" text-anchor="middle" font-size="13" fill="#222939">6회차</text>
+    <text x="630" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ A</text>
+  </g>
+  <g class="s7">
+    <line x1="680" y1="72" x2="680" y2="310" stroke="#e5e9f0"/>
+    <rect x="697" y="96" width="18" height="84" fill="#2337ff"/>
+    <text x="706" y="91" text-anchor="middle" font-size="11" fill="#222939">7</text>
+    <text x="706" y="268" text-anchor="middle" font-size="12" fill="#2337ff" font-weight="700">A</text>
+    <rect class="cut" x="695" y="96" width="22" height="84" fill="#d23f3f" fill-opacity="0.35" stroke="#d23f3f" stroke-dasharray="3 2"/>
+    <line x1="693" y1="180" x2="719" y2="180" stroke="#d23f3f" stroke-width="2"/>
+    <text x="691" y="184" text-anchor="end" font-size="11" font-weight="700" fill="#d23f3f">0</text>
+    <rect x="721" y="180" width="18" height="1.5" fill="#b4bfd9"/>
+    <text x="730" y="175" text-anchor="middle" font-size="11" fill="#222939">0</text>
+    <text x="730" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">B</text>
+    <rect x="745" y="180" width="18" height="1.5" fill="#b4bfd9"/>
+    <text x="754" y="175" text-anchor="middle" font-size="11" fill="#222939">0</text>
+    <text x="754" y="268" text-anchor="middle" font-size="12" fill="#60739f" font-weight="400">C</text>
+    <text x="730" y="292" text-anchor="middle" font-size="13" fill="#222939">7회차</text>
+    <text x="730" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#2337ff">→ A</text>
+  </g>
+</svg>
